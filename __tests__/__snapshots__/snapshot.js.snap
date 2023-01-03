@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders homepage unchanged 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <header
+      class="header"
+    >
+      <img
+        alt=""
+        class="borderCircle"
+        data-nimg="1"
+        decoding="async"
+        height="144"
+        src="/_next/image?url=%2Fimages%2Fprofile.jpg&w=384&q=75"
+        srcset="/_next/image?url=%2Fimages%2Fprofile.jpg&w=256&q=75 1x, /_next/image?url=%2Fimages%2Fprofile.jpg&w=384&q=75 2x"
+        style="color: transparent;"
+        width="144"
+      />
+      <h1
+        class="heading2Xl"
+      >
+        ComShare
+      </h1>
+    </header>
+    <main>
+      <section
+        class="headingMd"
+      >
+        <p>
+          This is the beginning of something bigger.
+        </p>
+      </section>
+      <section
+        class="headingMd padding1px"
+      >
+        <h2
+          class="headingLg"
+        >
+          Communities:
+        </h2>
+        <ul
+          class="list"
+        />
+      </section>
+      Not signed in 
+      <br />
+      <button>
+        Sign in
+      </button>
+    </main>
+  </div>
+</div>
+`;

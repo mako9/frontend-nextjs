@@ -1,4 +1,4 @@
-import '../styles/globals.css';
+import '../app/styles/globals.css';
 import { SessionProvider, unstable_getServerSession } from "next-auth/react"
 import { authOptions } from './api/auth/[...nextauth]'
 
