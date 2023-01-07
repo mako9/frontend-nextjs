@@ -8,7 +8,6 @@
     "test-ci": "jest --ci"
   },
   "dependencies": {
-    "date-fns": "^2.29.3",
     "next": "latest",
     "next-auth": "^4.18.7",
     "react": "18.2.0",

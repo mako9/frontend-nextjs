@@ -3,17 +3,16 @@ import Layout, { siteTitle } from '../app/components/layout';
 import utilStyles from '../app/styles/utils.module.css';
 import { getAllCommunities } from '../app/lib/communities';
 import Link from 'next/link';
-import Date from '../app/components/date';
 import LoginButton from '../app/components/login-button';
 
-export async function getStaticProps() {
-  const allCommunitiesData = getAllCommunities();
+export const getServerSideProps = async (context) => {
+  const allCommunitiesData = await getAllCommunities(context);
   return {
     props: {
-      allCommunitiesData: allCommunitiesData,
+      allCommunitiesData: allCommunitiesData ? allCommunitiesData.content : [],
     },
   };
-}
+};
 
 export default function Home({ allCommunitiesData }) {
   return (
@@ -27,13 +26,9 @@ export default function Home({ allCommunitiesData }) {
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Communities:</h2>
         <ul className={utilStyles.list}>
-          {allCommunitiesData.map(({ uuid, name, createdAt }) => (
+          {allCommunitiesData.map(({ uuid, name }) => (
             <li className={utilStyles.listItem} key={uuid}>
             <Link href={`/communities/${uuid}`}>{name}</Link>
-            <br />
-            <small className={utilStyles.lightText}>
-              <Date dateString={createdAt} />
-            </small>
           </li>
           ))}
         </ul>

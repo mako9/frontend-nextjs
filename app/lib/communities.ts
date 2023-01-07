@@ -1,32 +1,15 @@
 import { Community } from "../models/community";
+import { Page } from "../models/page";
+import { request } from "../utils/request";
 
-const communities: Community[] = [
-  {
-    uuid: '95C87636-8320-4155-AEEF-1BA973C872CA',
-    name: 'One',
-    createdAt: '2020-01-02'
-  },
-  {
-    uuid: '15C87636-8320-4155-AEEF-1BA973C872CA',
-    name: 'Two',
-    createdAt: '2020-01-03'
-  }
-];
-
-export function getAllCommunityUuids() {
-  return communities.map(community => {
-    return {
-      params: {
-        id: community.uuid,
-      },
-    };
-  });
+export async function getAllCommunities(context?): Promise<Page<Community>> {
+  const url = `${process.env.BACKEND_BASE_URL}/user/community`;
+  const result = await request<Page<Community>>(url, context);
+  return result.data;
 }
 
-export function getAllCommunities(): Community[] {
-  return communities;
-}
-
-export async function getCommunity(uuid) {
-  return communities.find(community => community.uuid === uuid);
+export async function getCommunity(uuid, context?): Promise<Community> {
+  const url = `${process.env.BACKEND_BASE_URL}/user/community/${uuid}`;
+  const result = await request<Community>(url, context);
+  return result.data;
 }
