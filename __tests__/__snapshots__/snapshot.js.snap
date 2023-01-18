@@ -10,12 +10,11 @@ exports[`renders homepage unchanged 1`] = `
     >
       <img
         alt=""
-        class="borderCircle"
         data-nimg="1"
         decoding="async"
         height="144"
-        src="/_next/image?url=%2Fimages%2Fprofile.jpg&w=384&q=75"
-        srcset="/_next/image?url=%2Fimages%2Fprofile.jpg&w=256&q=75 1x, /_next/image?url=%2Fimages%2Fprofile.jpg&w=384&q=75 2x"
+        src="/_next/image?url=%2Fimages%2Fquokka_logo.png&w=384&q=75"
+        srcset="/_next/image?url=%2Fimages%2Fquokka_logo.png&w=256&q=75 1x, /_next/image?url=%2Fimages%2Fquokka_logo.png&w=384&q=75 2x"
         style="color: transparent;"
         width="144"
       />
