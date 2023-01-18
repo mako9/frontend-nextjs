@@ -30,8 +30,7 @@ export default function Layout({ children, home }) {
           <>
             <Image
               priority
-              src="/images/profile.jpg"
-              className={utilStyles.borderCircle}
+              src="/images/quokka_logo.png"
               height={144}
               width={144}
               alt=""
@@ -43,8 +42,7 @@ export default function Layout({ children, home }) {
             <Link href="/">
               <Image
                 priority
-                src="/images/profile.jpg"
-                className={utilStyles.borderCircle}
+                src="/images/quokka_logo.png"
                 height={108}
                 width={108}
                 alt=""
