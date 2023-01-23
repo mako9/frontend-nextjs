@@ -1,5 +1,13 @@
-import NextAuth from "next-auth"
+import NextAuth, { DefaultSession } from "next-auth"
 import KeycloakProvider from "next-auth/providers/keycloak";
+
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    status: string,
+    accessToken: string,
+    error: string,
+  }
+}
 
 /**
  * Takes a token, and returns a new token with updated
@@ -9,19 +17,22 @@ import KeycloakProvider from "next-auth/providers/keycloak";
 async function refreshAccessToken(token) {
   try {
     const url =
-      `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token` +
-      new URLSearchParams({
+      `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`
+      
+      const formParams = new URLSearchParams({
         client_id: process.env.KEYCLOAK_CLIENT_ID,
         client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
         grant_type: "refresh_token",
         refresh_token: token.refreshToken,
       })
+    
 
     const response = await fetch(url, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       method: "POST",
+      body: formParams
     })
 
     const refreshedTokens = await response.json()
@@ -53,7 +64,7 @@ export const authOptions = {
     KeycloakProvider({
         clientId: process.env.KEYCLOAK_CLIENT_ID,
         clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
-        issuer: process.env.KEYCLOAK_ISSUER,
+        issuer: process.env.KEYCLOAK_ISSUER
       })
   ],
   callbacks: {
@@ -69,7 +80,7 @@ export const authOptions = {
       }
 
       // Return previous token if the access token has not expired yet
-      if (Date.now() < token.accessTokenExpires) {
+      if (Date.now() < token.exp) {
         return token
       }
 
@@ -77,12 +88,26 @@ export const authOptions = {
       return refreshAccessToken(token)
     },
     async session({ session, token }) {
-      session.user = token.user
-      session.accessToken = token.accessToken
-      session.error = token.error
+      if (token.error) {
+        session.accessToken = null
+        session.user = null
+        session.status = 'unauthenticated'
+        session.error = token.error
+      } else {
+        session.user = token.user
+        session.accessToken = token.accessToken
+        session.status = 'authenticated'
+      }
 
       return session
     },
   },
+  events: {
+    signOut: async (message) => {
+      const url = `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/logout`;
+      const result = await fetch(url);
+      console.log(`User logged out with status: ${result.status}`);
+    },
+  } 
 }
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);

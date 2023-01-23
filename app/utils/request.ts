@@ -1,10 +1,13 @@
 import { unstable_getServerSession } from "next-auth/next";
 import { getSession } from "next-auth/react";
 import { authOptions } from '../../pages/api/auth/[...nextauth]';
+import { Session } from "next-auth";
 
 export async function request<Type>(url: string, context): Promise<HttpResponse<Type>> {
-    const accessToken = await getAccessToken(context);
+    const currentSession = await getCurrentSession(context);
+    const accessToken = await getAccessToken(currentSession);
     if (!accessToken) {
+        if (currentSession) currentSession.accessToken = null;
         return {
             data: null,
             statusCode: 401,
@@ -13,8 +16,8 @@ export async function request<Type>(url: string, context): Promise<HttpResponse<
     }
     var headers = getRequestHeaders(accessToken);
     var result = await httpRequest<Type>(url, headers);
-    if (result.statusCode !== 401) {
-        
+    if (result.statusCode === 401) {
+        if (currentSession) currentSession.accessToken = null;
     };
     return result;
 }
@@ -56,11 +59,14 @@ function getRequestHeaders(token) {
     };
 }
 
-async function getAccessToken(context) {
-    const session = context ?
+async function getAccessToken(session): Promise<String> {
+    return session ? session.accessToken : null;
+}
+
+async function getCurrentSession(context): Promise<Session> {
+    return context ?
         await unstable_getServerSession(context.req, context.res, authOptions)
         : await getSession();
-    return session ? session.accessToken : null;
 }
 
 export type HttpResponse<Type> = {
