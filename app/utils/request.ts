@@ -1,6 +1,7 @@
 import { unstable_getServerSession } from "next-auth/next";
 import { getSession } from "next-auth/react";
 import { authOptions } from '../../pages/api/auth/[...nextauth]';
+import { Session } from "next-auth";
 
 export async function request<Type>(url: string, context): Promise<HttpResponse<Type>> {
     const currentSession = await getCurrentSession(context);
@@ -62,7 +63,7 @@ async function getAccessToken(session): Promise<String> {
     return session ? session.accessToken : null;
 }
 
-async function getCurrentSession(context) {
+async function getCurrentSession(context): Promise<Session> {
     return context ?
         await unstable_getServerSession(context.req, context.res, authOptions)
         : await getSession();
