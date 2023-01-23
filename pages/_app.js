@@ -1,6 +1,9 @@
 import '../app/styles/globals.css';
 import { SessionProvider, unstable_getServerSession, useSession } from "next-auth/react"
 import { authOptions } from './api/auth/[...nextauth]'
+import Layout from '../app/components/layout';
+
+const appName = 'ComShare';
 
 export default function App({
     Component,
@@ -10,10 +13,14 @@ export default function App({
       <SessionProvider session={session}>
        {Component.auth ? (
           <Auth>
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </Auth>
         ) : (
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         )
         }
       </SessionProvider>
@@ -23,7 +30,6 @@ export default function App({
   function Auth({ children }) {
     // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
     const { data, status } = useSession()
-    console.log(status);
   
     if (status === "loading") {
       return <div>Loading...</div>

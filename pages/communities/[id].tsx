@@ -1,4 +1,3 @@
-import Layout from '../../app/components/layout'
 import { getCommunity } from '../../app/lib/communities'
 import Head from 'next/head'
 import utilStyles from '../../app/styles/utils.module.css'
@@ -16,13 +15,13 @@ export default function Community({ communityData }) {
     return null;
   }
   return (
-    <Layout home={undefined}>
+    <div>
       <Head>
         <title>{communityData.name}</title>
       </Head>
       <article>
         <h1 className={utilStyles.headingXl}>{communityData.name}</h1>
       </article>
-    </Layout>
+    </div>
   );
 }

@@ -1,10 +1,10 @@
 import Head from 'next/head';
-import Layout, { siteTitle } from '../app/components/layout';
+import { siteTitle } from '../app/components/layout';
 import utilStyles from '../app/styles/utils.module.css';
 import { getAllCommunities } from '../app/lib/communities';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Router from 'next/router'
 
 export const getServerSideProps = async (context) => {
@@ -20,13 +20,13 @@ export default function Home({ allCommunitiesData }) {
   const { data } = useSession();
 
   useEffect(() => {
-    if (data.status === 'unauthenticated') {
+    if (data?.status === 'unauthenticated') {
       Router.push('/login')
     }
   }, [data]);
 
   return (
-    <Layout home>
+    <div>
       <Head>
         <title>{siteTitle}</title>
       </Head>
@@ -43,11 +43,7 @@ export default function Home({ allCommunitiesData }) {
           ))}
         </ul>
       </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-      Signed in as {data.user.email} <br />
-        <button onClick={() => signOut({ callbackUrl: '/login' })}>Sign out</button>
-      </section>
-    </Layout>
+    </div>
   );
 }
 

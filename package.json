@@ -1,4 +1,10 @@
 {
+  "name": "frontend-nextjs",
+  "version": "0.0.1",
+  "description": "Next.js frontend",
+  "author": {
+    "name": "Mario Kohlhoff"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
