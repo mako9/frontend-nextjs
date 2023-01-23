@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import styles from '../styles/layout.module.css';
-import Navbar from './navbar';
+import NavBar from './navBar';
 import Footer from './footer';
 
 export const siteTitle = 'ComShare';
@@ -8,7 +8,7 @@ export const siteTitle = 'ComShare';
 export default function Layout({ children }) {
   return (
     <div>
-      <Navbar/>
+      <NavBar/>
       <div className={styles.container}>
         <Head>
           <link rel="icon" href="/quokka_logo.ico" />

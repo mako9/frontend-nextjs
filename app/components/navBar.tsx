@@ -1,18 +1,18 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import NavItem from "./navitem";
+import NavItem from "./navItem";
 import { useSession, signOut } from 'next-auth/react';
-import styles from '../styles/navbar.module.css';
+import styles from '../styles/nav.module.css';
 
 const MENU_LIST = [
   { text: "Home", href: "/" },
   { text: "About Us", href: "/about" },
   { text: "Contact", href: "/contact" },
 ];
-const Navbar = () => {
+const NavBar = () => {
   const { data } = useSession();
   const [navActive, setNavActive] = useState(null);
-  const [activeIdx, setActiveIdx] = useState(-1);
+  const [activeIdx, setActiveIdx] = useState(0);
   const [showLogout, setShowLogout] = useState(data !== null && data?.status === 'authenticated');
 
   useEffect(() => {
@@ -64,4 +64,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavBar;

@@ -36,9 +36,6 @@
   transition: all 0.2s;
   min-height: calc(100vh - 60px);
 }
-.nav__menu_list.active{
-  right: 0;
-}
 .nav__link{
   font-size: 18px; 
   position: relative;
@@ -47,15 +44,17 @@
   outline: none;
   background-color: transparent;
 }
+.nav__link_active{
+  font-weight: bold;
+  right: 0;
+}
 .nav__img{
   height: 40px; 
   width: relative;
 }
-
 .nav__link:hover{
  font-weight: bold;
 }
-
 .center{
   min-height: 600px;
   display: flex;
