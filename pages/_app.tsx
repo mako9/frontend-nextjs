@@ -1,31 +1,30 @@
 import '../app/styles/globals.css';
-import { SessionProvider, unstable_getServerSession, useSession } from "next-auth/react"
-import { authOptions } from './api/auth/[...nextauth]'
+import { SessionProvider, useSession } from "next-auth/react";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from './api/auth/[...nextauth]';
 import Layout from '../app/components/layout';
+import { appWithTranslation } from 'next-i18next';
 
-const appName = 'ComShare';
-
-export default function App({
+const App = ({
     Component,
     pageProps: { session, ...pageProps },
-  }) {
-    return (
-      <SessionProvider session={session}>
-       {Component.auth ? (
-          <Auth>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </Auth>
-        ) : (
+  }) => (
+    <SessionProvider session={session}>
+      {Component.auth ? (
+        <Auth>
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        )
-        }
-      </SessionProvider>
-    )
-  }
+        </Auth>
+      ) : (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      )
+      }
+    </SessionProvider>
+  );
+  export default appWithTranslation(App);
 
   function Auth({ children }) {
     // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
@@ -44,7 +43,7 @@ export default function App({
   export async function getServerSideProps({ req, res }) {
     return {
       props: {
-        session: await unstable_getServerSession(req, res, authOptions)
+        session: await unstable_getServerSession(req, res, authOptions),
       }
     }
   }

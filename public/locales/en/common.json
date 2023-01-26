@@ -1,0 +1,17 @@
+{
+    "navBar": {
+        "home": "Home",
+        "about": "About us",
+        "contact": "Contact",
+        "signout": "Sign out"
+    },
+    "login": {
+        "greeting": "Hey there!",
+        "signupMessage": "Please login or sign up here:",
+        "goToSignup": "Go to sign up page"
+    },
+    "index": {
+        "header": "This is the beginning of something bigger.",
+        "tableHeader": "Communities"
+    }
+}

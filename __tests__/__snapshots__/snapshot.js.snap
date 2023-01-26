@@ -7,7 +7,7 @@ exports[`renders homepage unchanged 1`] = `
       class="headingMd"
     >
       <p>
-        This is the beginning of something bigger.
+        index.header
       </p>
     </section>
     <section
@@ -16,7 +16,7 @@ exports[`renders homepage unchanged 1`] = `
       <h2
         class="headingLg"
       >
-        Communities:
+        index.tableHeader
       </h2>
       <ul
         class="list"
