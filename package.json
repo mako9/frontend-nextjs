@@ -14,10 +14,13 @@
     "test-ci": "jest --ci"
   },
   "dependencies": {
+    "i18next": "^22.4.9",
     "next": "latest",
     "next-auth": "^4.18.7",
+    "next-i18next": "^13.0.3",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-i18next": "^12.1.4"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

@@ -3,13 +3,16 @@ import React, { useEffect, useState } from "react";
 import NavItem from "./navItem";
 import { useSession, signOut } from 'next-auth/react';
 import styles from '../styles/nav.module.css';
+import { useTranslation } from 'next-i18next';
 
-const MENU_LIST = [
-  { text: "Home", href: "/" },
-  { text: "About Us", href: "/about" },
-  { text: "Contact", href: "/contact" },
-];
 const NavBar = () => {
+  const { t } = useTranslation('common');
+  const MENU_LIST = [
+    { text: t('navBar.home'), href: "/" },
+    { text: t('navBar.about'), href: "/about" },
+    { text: t('navBar.contact'), href: "/contact" },
+  ];
+
   const { data } = useSession();
   const [navActive, setNavActive] = useState(null);
   const [activeIdx, setActiveIdx] = useState(0);
@@ -57,7 +60,7 @@ const NavBar = () => {
                 signOut({ callbackUrl: '/login' });
               }}
               key="Sign out"
-            ><button className={styles.nav__link}>Sign out</button></div> : null}
+            ><button className={styles.nav__link}>{t('navBar.signout')}</button></div> : null}
         </div>
       </nav>
     </header>

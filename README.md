@@ -33,3 +33,5 @@ To run the application we need some basic components install:
     Used for authentication at Keycloak provider.
 - [Jest](https://jestjs.io/):
     Used for unit testing.
+- [next-i18next](https://github.com/i18next/next-i18next):
+    Used for localizationn.
