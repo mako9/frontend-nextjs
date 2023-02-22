@@ -1,8 +1,19 @@
 {
+    "save": "Speichern",
+    "delete": "Löschen",
+    "select": "Auswählen",
+    "pleaseSelect": "Bitte auswählen ...",
+    "name": "Name",
+    "address": "Adresse",
+    "street": "Straße",
+    "houseNumber": "Hausnummer",
+    "postalCode": "PLZ",
+    "city": "Stadt",
     "navBar": {
         "home": "Home",
         "about": "Über uns",
         "contact": "Kontakt",
+        "myArea": "Mein Bereich",
         "signout": "Ausloggen"
     },
     "login": {
@@ -13,5 +24,37 @@
     "index": {
         "header": "Das ist der Beginn von etwas größerem.",
         "tableHeader": "Communities"
+    },
+    "myArea": {
+        "communities": "Communities",
+        "items": "Items"
+    },
+    "community": {
+        "community": "Community",
+        "members": "Mitglieder",
+        "memberRequests": "Mitgliedsanfragen",
+        "approveRequests": "Mitgliedsanfragen bestätigen",
+        "declineRequests": "Mitgliedsanfragen ablehnen",
+        "noMembersExist": "Keine Mitglieder vorhanden",
+        "noRequestsExist": "Keine Anfragen vorhanden",
+        "requestMembership": "Mitgliedschaft anfragen",
+        "canBeJoined": "Können Nutzer der Community beitreten?"
+    },
+    "user": {
+        "firstName": "First name",
+        "lastName": "Last name"
+    },
+    "item": {
+        "item": "Item",
+        "isActive": "Ist aktiv?",
+        "relatedCommunity": "Verknüpfte Community:",
+        "category": {
+            "category": "Kategorie",
+            "housekeeping": "Haushalt",
+            "gardening": "Gartenarbeit",
+            "tool": "Werkzeug",
+            "electicDevice": "Elektronisches Gerät",
+            "other": "Andere"
+        }
     }
 }

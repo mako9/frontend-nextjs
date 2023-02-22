@@ -8,9 +8,11 @@ import { useSession } from 'next-auth/react';
 import Router from 'next/router'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { getServerSideSession } from '../app/utils/session';
 
 export const getServerSideProps = async (context) => {
-  const allCommunitiesData = await getAllCommunities(context);
+  const session = await getServerSideSession(context);
+  const allCommunitiesData = await getAllCommunities(session);
   return {
     props: {
       allCommunitiesData: allCommunitiesData ? allCommunitiesData.content : [],
@@ -44,7 +46,7 @@ export default function Home({ allCommunitiesData }) {
         <ul className={utilStyles.list}>
           {allCommunitiesData.map(({ uuid, name }) => (
             <li className={utilStyles.listItem} key={uuid}>
-            <Link href={`/communities/${uuid}`}>{name}</Link>
+            <Link href={{ pathname: `/communities/${uuid}`, query: { isOwned: false }}}>{name}</Link>
           </li>
           ))}
         </ul>

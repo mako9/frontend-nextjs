@@ -1,0 +1,11 @@
+.map {
+    height: 400px;
+    width: 100%;
+}
+
+.map_default_background {
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

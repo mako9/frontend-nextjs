@@ -4,24 +4,27 @@ import NavItem from "./navItem";
 import { useSession, signOut } from 'next-auth/react';
 import styles from '../styles/nav.module.css';
 import { useTranslation } from 'next-i18next';
+import { useStateValue } from "./context";
 
 const NavBar = () => {
   const { t } = useTranslation('common');
-  const MENU_LIST = [
+
+  const { data } = useSession();
+  const [navActive, setNavActive] = useState(null);
+  const { state, setState } = useStateValue();
+  const [isLoggedIn, setIsLoggedIn] = useState(data !== null && data?.status === 'authenticated');
+
+  var menuList = [
     { text: t('navBar.home'), href: "/" },
     { text: t('navBar.about'), href: "/about" },
     { text: t('navBar.contact'), href: "/contact" },
   ];
-
-  const { data } = useSession();
-  const [navActive, setNavActive] = useState(null);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [showLogout, setShowLogout] = useState(data !== null && data?.status === 'authenticated');
+  if (isLoggedIn) menuList.push({ text: t('navBar.myArea'), href: "/my-area" })
 
   useEffect(() => {
     console.log(data?.status === 'authenticated')
-    setShowLogout(data !== null && data?.status === 'authenticated');
-    console.log(showLogout)
+    setIsLoggedIn(data !== null && data?.status === 'authenticated');
+    console.log(isLoggedIn)
   }, [data]);
 
   return (
@@ -44,18 +47,19 @@ const NavBar = () => {
           <div></div>
         </div>
         <div className={styles.nav__menu_list}>
-          {MENU_LIST.map((menu, idx) => (
+          {menuList.map((menu, idx) => (
             <div
               onClick={() => {
-                setActiveIdx(idx);
+                state.selectedNavbarIndex = idx;
+                setState(state);
                 setNavActive(false);
               }}
               key={menu.text}
             >
-              <NavItem active={activeIdx === idx} {...menu} />
+              <NavItem active={state?.selectedNavbarIndex === idx} {...menu} />
             </div>
           ))}
-         {showLogout ? <div
+         {isLoggedIn ? <div
               onClick={() => {
                 signOut({ callbackUrl: '/login' });
               }}

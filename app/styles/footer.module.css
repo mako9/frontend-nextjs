@@ -1,6 +1,6 @@
 
 .footer {
-  background: rgb(188, 170, 164);
+  background: var(--primary-color);
   text-align: center;
   display: flex;
   flex-direction: column;

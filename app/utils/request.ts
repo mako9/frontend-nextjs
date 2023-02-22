@@ -1,13 +1,9 @@
-import { unstable_getServerSession } from "next-auth/next";
-import { getSession } from "next-auth/react";
-import { authOptions } from '../../pages/api/auth/[...nextauth]';
 import { Session } from "next-auth";
 
-export async function request<Type>(url: string, context): Promise<HttpResponse<Type>> {
-    const currentSession = await getCurrentSession(context);
-    const accessToken = await getAccessToken(currentSession);
+export async function request<Type>(url: string, session: Session, method: HttpMethod = HttpMethod.Get, body = null): Promise<HttpResponse<Type>> {
+    const accessToken = await getAccessToken(session);
     if (!accessToken) {
-        if (currentSession) currentSession.accessToken = null;
+        if (session) session.accessToken = null;
         return {
             data: null,
             statusCode: 401,
@@ -15,16 +11,19 @@ export async function request<Type>(url: string, context): Promise<HttpResponse<
         }
     }
     var headers = getRequestHeaders(accessToken);
-    var result = await httpRequest<Type>(url, headers);
+    var result = await httpRequest<Type>(url, headers, method, body);
     if (result.statusCode === 401) {
-        if (currentSession) currentSession.accessToken = null;
+        if (session) session.accessToken = null;
     };
     return result;
 }
 
-async function httpRequest<Type>(url: string, headers): Promise<HttpResponse<Type>> {
+async function httpRequest<Type>(url: string, headers, method: HttpMethod, body): Promise<HttpResponse<Type>> {
+    var json = body ? JSON.stringify(body) : null;
     const res = await fetch(url, {
-        headers: headers
+        headers: headers,
+        method: method,
+        body: json
     });
     if (!res.ok) {
         return {
@@ -63,14 +62,16 @@ async function getAccessToken(session): Promise<String> {
     return session ? session.accessToken : null;
 }
 
-async function getCurrentSession(context): Promise<Session> {
-    return context ?
-        await unstable_getServerSession(context.req, context.res, authOptions)
-        : await getSession();
-}
-
 export type HttpResponse<Type> = {
     data: Type;
     statusCode: number;
     errorMessage: string;
 };
+
+export enum HttpMethod {
+    Get = 'GET',
+    Post = 'POST',
+    Patch = 'PATCH',
+    Put = 'PUT',
+    Delete = 'DELETE'
+  }

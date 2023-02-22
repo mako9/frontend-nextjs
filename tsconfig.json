@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": [
       "dom",
       "dom.iterable",
@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/communities/[id].ts", "pages/_app.tsx"  ],
+, "pages/_app.tsx"  ],
   "exclude": [
     "node_modules"
   ]
