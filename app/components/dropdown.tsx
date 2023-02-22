@@ -29,8 +29,8 @@ const Dropdown = ({
   const [showMenu, setShowMenu] = useState(false);
   const [selectedValue, setSelectedValue] = useState(initialOption);
   const [searchValue, setSearchValue] = useState("");
-  const searchRef = useRef();
-  const inputRef = useRef();
+  const searchRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>();
 
   useEffect(() => {
     setSearchValue("");
