@@ -7,6 +7,7 @@ import Router from 'next/router';
 import styles from '../app/styles/layout.module.css';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Button from '../app/components/button';
 
 export default function Login() {
   const { t } = useTranslation('common');
@@ -38,7 +39,7 @@ export default function Login() {
         <br/><br/>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <button className='button' onClick={() => signIn('keycloak', { callbackUrl: '/' })}>{t('login.goToSignup')}</button>
+        <Button title={t('login.goToSignup')} onClick={() => signIn('keycloak', { callbackUrl: '/' })} />
       </section>
     </div>
   );

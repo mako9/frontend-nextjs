@@ -1,8 +1,19 @@
 {
+    "save": "Save",
+    "delete": "Delete",
+    "select": "Select",
+    "pleaseSelect": "Please select ...",
+    "name": "Name",
+    "address": "Address",
+    "street": "Street",
+    "houseNumber": "Housenumber",
+    "postalCode": "Postal code",
+    "city": "City",
     "navBar": {
         "home": "Home",
         "about": "About us",
         "contact": "Contact",
+        "myArea": "My area",
         "signout": "Sign out"
     },
     "login": {
@@ -13,5 +24,37 @@
     "index": {
         "header": "This is the beginning of something bigger.",
         "tableHeader": "Communities"
+    },
+    "myArea": {
+        "communities": "Communities",
+        "items": "Items"
+    },
+    "community": {
+        "community": "Community",
+        "members": "Members",
+        "memberRequests": "Requests for membership",
+        "approveRequests": "Approve membership request",
+        "declineRequests": "Decline membership request",
+        "noMembersExist": "No members exist",
+        "noRequestsExist": "No requests exist",
+        "requestMembership": "Request membership",
+        "canBeJoined": "User can join community?"
+    },
+    "user": {
+        "firstName": "First name",
+        "lastName": "Last name"
+    },
+    "item": {
+        "item": "Item",
+        "isActive": "Is active?",
+        "relatedCommunity": "Related community:",
+        "category": {
+            "category": "Category",
+            "housekeeping": "Housekeeping",
+            "gardening": "Gardening",
+            "tool": "Tool",
+            "electicDevice": "Electic Device",
+            "other": "Other"
+        }
     }
 }

@@ -10,7 +10,7 @@
   padding-right: 8px;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(188, 170, 164);
+  background-color: var(--primary-color);
 }
 .nav__menu_bar{
   display: flex;

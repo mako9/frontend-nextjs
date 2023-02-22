@@ -13,18 +13,34 @@ img {
   display: block;
 }
 
-.button {
-  background-color: rgb(188, 170, 164);
-  border: none;
-  padding: 15px 32px;
+p {
+  width: 100%;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+[type="checkbox"] {
+  -webkit-appearance: none;
+}
+[type="checkbox"]::before {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid var(--primary-color);
+  background-color: #fff;
+  display: block;
+  content: "";
+  float: left;
+  margin-right: 5px;
+  z-index: 5;
+  position: relative;
+}
+[type="checkbox"]:checked::before {
+  box-shadow: inset 0px 0px 0px 3px #fff;
+  background-color: var(--primary-color);
+}
+
+.spacer {
+  height: 10px;
 }
 
 
