@@ -8,11 +8,19 @@ import { useStateValue } from "./context";
 
 const NavBar = () => {
   const { t } = useTranslation('common');
-
   const { data } = useSession();
-  const [navActive, setNavActive] = useState(null);
+  const [navActive, setNavActive] = useState(false);
   const { state, setState } = useStateValue();
   const [isLoggedIn, setIsLoggedIn] = useState(data !== null && data?.status === 'authenticated');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsMenuOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsMenuOpen(false);
+  };
 
   var menuList = [
     { text: t('navBar.home'), href: "/" },
@@ -28,25 +36,18 @@ const NavBar = () => {
   }, [data]);
 
   return (
-    <header className={styles.nav__header}>
+    <header className={styles.nav_header}>
       <nav className={styles.nav}>
-        <div className={styles.nav__menu_list}>
-            <Link href={"/"}>
-                <img className={styles.nav__img} src="/images/quokka_logo.png" />
+        <div className={styles.nav_list}>
+            <Link className={`${navActive ? styles.nav_element_hide : ''}`} href={"/"}>
+                <img className={styles.nav_img} src="/images/quokka_logo.png" />
             </Link>
-            <Link href={"/"}>
+            <Link className={styles.nav_title} href={"/"}>
                 <h1 className="logo">ComShare</h1>
             </Link>
         </div>
-        <div
-          onClick={() => setNavActive(!navActive)}
-          className={styles.nav__menu_bar}
-        >
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        <div className={styles.nav__menu_list}>
+        <div className={styles.nav_list}>
+        <div className={`${styles.nav_menu_list} ${navActive ? styles.nav_menu_list_show : ''}`}>
           {menuList.map((menu, idx) => (
             <div
               onClick={() => {
@@ -59,12 +60,33 @@ const NavBar = () => {
               <NavItem active={state?.selectedNavbarIndex === idx} {...menu} />
             </div>
           ))}
-         {isLoggedIn ? <div
-              onClick={() => {
-                signOut({ callbackUrl: '/login' });
-              }}
-              key="Sign out"
-            ><button className={styles.nav__link}>{t('navBar.signout')}</button></div> : null}
+          </div>
+          <div
+          onClick={() => setNavActive(!navActive)}
+          className={styles.nav_menu_bar}
+        >
+          <img className={styles.nav_img} src="/icons/hamburger_menu.svg" />
+        </div>
+         {isLoggedIn ?
+         <div
+            className={`${styles.dropdown_button} ${navActive ? styles.nav_element_hide : ''}`}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img className={styles.nav_img} src="/icons/user_profile.svg" />
+            {isMenuOpen && (
+            <div className={styles.dropdown_container}>
+              <div className={styles.dropdown_menu}>
+                <li>
+                  <Link href="/settings">
+                    Settings
+                  </Link>
+                </li>
+                <li onClick={() => { signOut({ callbackUrl: '/login' }) }} key="Sign out">{t('navBar.signout')}</li>
+              </div>
+            </div>
+          )}
+          </div> : null}
         </div>
       </nav>
     </header>

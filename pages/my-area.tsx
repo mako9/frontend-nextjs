@@ -30,7 +30,7 @@ const MyArea = ({ ownedCommunitiesData, ownedItemsData }) => {
     {
         Header: t('name'),
         accessor: 'name',
-        className: 'th_round_left',
+        className: 'th_round_left_right',
         linkParams: { href: '/communities', query: { isOwned: true } }
     }
 ]

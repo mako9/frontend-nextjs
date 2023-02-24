@@ -8,14 +8,14 @@ interface StateContext {
 
 const StateContext = React.createContext<StateContext>({
   state: {
-    selectedNavbarIndex: null
+    selectedNavbarIndex: 0
   },
   setState: () => {}
 });
 
 export const StateProvider = ({ children }) => {
   const [state, setState] = React.useState({
-    selectedNavbarIndex: null
+    selectedNavbarIndex: 0
   });
 
   return (
