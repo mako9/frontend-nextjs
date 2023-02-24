@@ -29,7 +29,6 @@ export default function Login() {
             src="/images/quokka_logo.png"
             height={144}
             width={144}
-            alt=""
           />
           <h1 className={utilStyles.heading2Xl}>ComShare</h1>
       </header>
