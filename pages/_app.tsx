@@ -1,11 +1,12 @@
 import '../app/styles/globals.css';
 import '../app/styles/colors.css';
 import { SessionProvider, useSession } from "next-auth/react";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from './api/auth/[...nextauth]';
 import Layout from '../app/components/layout';
 import { appWithTranslation } from 'next-i18next';
 import { StateProvider } from '../app/components/context';
+import Spinner from '../app/components/spinner';
 
 const App = ({
     Component,
@@ -35,7 +36,7 @@ const App = ({
     const { data, status } = useSession()
   
     if (status === "loading") {
-      return <div>Loading...</div>
+      return <Spinner/>
     } else  if (status === "unauthenticated" || !data) {
       window.location.href = '/login';
       return;
@@ -47,7 +48,7 @@ const App = ({
   export async function getServerSideProps({ req, res }) {
     return {
       props: {
-        session: await unstable_getServerSession(req, res, authOptions),
+        session: await getServerSession(req, res, authOptions),
       }
     }
   }

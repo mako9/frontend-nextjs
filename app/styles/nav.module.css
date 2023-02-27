@@ -68,6 +68,10 @@
   height: 40px; 
   width: relative;
 }
+.nav_icon {
+  height: 30px; 
+  width: relative;
+}
 .nav_link:hover {
  font-weight: bold;
 }

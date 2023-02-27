@@ -7,8 +7,14 @@ import { approveMemberRequests, declineMemberRequests, deleteCommunity, editComm
 import inputStyles from '../../styles/input.module.css';
 import utilStyles from '../../styles/utils.module.css';
 import keyStyles from '../../styles/keyValue.module.css';
+import { useStateValue } from "../context";
+import { useRouter } from "next/router";
+import { clientSideRequest } from "../../utils/request";
 
 export default function ownedCommunity(session, communityData, members, requestingMember, t) {
+    const { state, setState } = useStateValue();
+    const router = useRouter();
+    
     const [name, setName] = useState(communityData.name);
     const [street, setStreet] = useState(communityData.street);
     const [houseNumber, setHouseNumber] = useState(communityData.houseNumber);
@@ -17,6 +23,22 @@ export default function ownedCommunity(session, communityData, members, requesti
     const [canBeJoined, setCanBeJoined] = useState(communityData.canBeJoined);
     const [userUuids, setUserUuids] = useState([]);
   
+    const editCommunityWithLoading = clientSideRequest(editCommunity, state, setState);
+    const deleteCommunityWithLoading = clientSideRequest(deleteCommunity, state, setState);
+    const approveMemberRequestsWithLoading = clientSideRequest(approveMemberRequests, state, setState);
+    const declineMemberRequestsWithLoading = clientSideRequest(declineMemberRequests, state, setState);
+    const onHandleCommunityDelete = async () => {
+        await deleteCommunityWithLoading(communityData.uuid, session);
+        router.back();
+    }
+    const onHandleApproveMemberRequests = async () => {
+      await approveMemberRequestsWithLoading(communityData.uuid, userUuids, session);
+      router.reload();
+  }
+  const onHandleDeclineMemberRequests = async () => {
+    await declineMemberRequestsWithLoading(communityData.uuid, userUuids, session);
+    router.reload();
+}
     const handleListCheckboxChange = (row, isChecked) => {
       const userUuid = requestingMember.content[row.index]?.uuid
       if (userUuid) {
@@ -87,7 +109,7 @@ export default function ownedCommunity(session, communityData, members, requesti
         </div>
         <br/>
         <div style={{display: 'flex'}}>
-          <Button title={t('save')} onClick={() => editCommunity({
+          <Button title={t('save')} onClick={() => editCommunityWithLoading({
             street,
             houseNumber,
             postalCode,
@@ -99,7 +121,7 @@ export default function ownedCommunity(session, communityData, members, requesti
             longitude: communityData.longitude,
             canBeJoined: canBeJoined
           }, session)} />
-          <Button title={t('delete')} onClick={() => deleteCommunity(communityData.uuid, session)} />
+          <Button title={t('delete')} onClick={onHandleCommunityDelete} />
         </div>
         <br/><br/>
         <h3>{t('community.members')}</h3>
@@ -108,8 +130,8 @@ export default function ownedCommunity(session, communityData, members, requesti
         <h3>{t('community.memberRequests')}</h3>
         <Table columns={requestColumns} data={requestingMember.content} noValueText={t('community.noRequestsExist')} />
         <br/>
-        <Button title={t('community.approveRequests')} onClick={() => approveMemberRequests(communityData.uuid, userUuids, session)} isDisabled={requestingMember.size > 0} />
-        <Button title={t('community.declineRequests')} onClick={() => declineMemberRequests(communityData.uuid, userUuids, session)} isDisabled={requestingMember.size > 0} />
+        <Button title={t('community.approveRequests')} onClick={onHandleApproveMemberRequests} isDisabled={requestingMember.size > 0} />
+        <Button title={t('community.declineRequests')} onClick={onHandleDeclineMemberRequests} isDisabled={requestingMember.size > 0} />
       </div>
     );
   }

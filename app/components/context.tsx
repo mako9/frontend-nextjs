@@ -3,20 +3,21 @@ import { State } from "../models/state";
 
 interface StateContext {
   state: State;
-  setState: (statee: State) => void;
+  setState: React.Dispatch<React.SetStateAction<State>>;
 }
 
+const defaultState: State = {
+  selectedNavbarIndex: 0,
+  isLoading: false
+};
+
 const StateContext = React.createContext<StateContext>({
-  state: {
-    selectedNavbarIndex: 0
-  },
+  state: defaultState,
   setState: () => {}
 });
 
 export const StateProvider = ({ children }) => {
-  const [state, setState] = React.useState({
-    selectedNavbarIndex: 0
-  });
+  const [state, setState] = React.useState(defaultState);
 
   return (
     <StateContext.Provider value={{state, setState }}>

@@ -50,6 +50,15 @@ async function httpRequest<Type>(url: string, headers, method: HttpMethod, body)
     }
 }
 
+export function clientSideRequest(originalFunction, state, setState) {
+    return async function(...args: any) {
+        setState({ ...state, isLoading: true });
+        const result = await originalFunction(...args);
+        setState({ ...state, isLoading: false });
+        return result;
+      }
+}
+
 function getRequestHeaders(token) {
     return {
         'Content-Type': 'application/json',

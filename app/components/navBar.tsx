@@ -51,8 +51,7 @@ const NavBar = () => {
           {menuList.map((menu, idx) => (
             <div
               onClick={() => {
-                state.selectedNavbarIndex = idx;
-                setState(state);
+                setState({ ...state, selectedNavbarIndex: idx });
                 setNavActive(false);
               }}
               key={menu.text}
@@ -65,7 +64,7 @@ const NavBar = () => {
           onClick={() => setNavActive(!navActive)}
           className={styles.nav_menu_bar}
         >
-          <img className={styles.nav_img} src="/icons/hamburger_menu.svg" />
+          <img className={styles.nav_icon} src="/icons/hamburger_menu.svg" />
         </div>
          {isLoggedIn ?
          <div
@@ -73,7 +72,7 @@ const NavBar = () => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <img className={styles.nav_img} src="/icons/user_profile.svg" />
+            <img className={styles.nav_icon} src="/icons/user_profile.svg" />
             {isMenuOpen && (
             <div className={styles.dropdown_container}>
               <div className={styles.dropdown_menu}>

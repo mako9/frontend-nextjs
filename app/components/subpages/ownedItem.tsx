@@ -7,8 +7,14 @@ import { useState } from "react";
 import Button from "../button";
 import { deleteItem, editItem } from "../../lib/items";
 import Dropdown from "../dropdown";
+import { clientSideRequest } from "../../utils/request";
+import { useStateValue } from "../../components/context";
+import { useRouter } from 'next/router';
 
-export default function ownedCommunity(session, itemData, myCommunities, t) {
+export default function ownedItem(session, itemData, myCommunities, t) {
+    const { state, setState } = useStateValue();
+    const router = useRouter();
+
     const itemCategories = [
         { id: 'HOUSEKEEPING', label: t('item.category.housekeeping') },
         { id: 'GARDENING', label: t('item.category.gardening') },
@@ -27,6 +33,13 @@ export default function ownedCommunity(session, itemData, myCommunities, t) {
     const [community, setCommunity] = useState(initialCommunity ? { id: initialCommunity.uuid, label: initialCommunity.name } : null);
     const initialCategories = itemData.categories.map(category => itemCategories.find(e => e.id === category));
     const [categories, setCategories] = useState(initialCategories);
+
+    const editItemWithLoading = clientSideRequest(editItem, state, setState);
+    const deleteItemWithLoading = clientSideRequest(deleteItem, state, setState)
+    const onHandleItemDelete = async () => {
+        await deleteItemWithLoading(itemData.uuid, session);
+        router.back();
+    }
     
     return (
         <div>
@@ -82,7 +95,7 @@ export default function ownedCommunity(session, itemData, myCommunities, t) {
             />
             <br/><br/>
             <div style={{display: 'flex'}}>
-            <Button title={t('save')} onClick={() => editItem({
+            <Button title={t('save')} onClick={() => editItemWithLoading({
                 street,
                 houseNumber,
                 postalCode,
@@ -98,7 +111,7 @@ export default function ownedCommunity(session, itemData, myCommunities, t) {
                 description: itemData.desciption,
                 communityName: ""
             }, session)} />
-            <Button title={t('delete')} onClick={() => deleteItem(itemData.uuid, session)} />
+            <Button title={t('delete')} onClick={onHandleItemDelete} />
             </div>
         </div>
       );
