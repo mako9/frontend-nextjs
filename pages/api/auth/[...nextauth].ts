@@ -1,5 +1,6 @@
 import NextAuth, { DefaultSession } from "next-auth"
 import KeycloakProvider from "next-auth/providers/keycloak";
+import logger from "../../../app/utils/logger";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -48,7 +49,7 @@ async function refreshAccessToken(token) {
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     }
   } catch (error) {
-    console.log(error)
+    logger.log(error)
 
     return {
       ...token,
@@ -106,7 +107,7 @@ export const authOptions = {
     signOut: async (message) => {
       const url = `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/logout`;
       const result = await fetch(url);
-      console.log(`User logged out with status: ${result.status}`);
+      logger.debug(`User logged out with status: ${result.status}`);
     },
   } 
 }

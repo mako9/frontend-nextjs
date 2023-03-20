@@ -2,10 +2,15 @@ import Head from 'next/head';
 import styles from '../styles/layout.module.css';
 import NavBar from './navBar';
 import Footer from './footer';
+import { useStateValue } from './context';
+import Spinner from './spinner';
+import React from 'react';
 
 export const siteTitle = 'ComShare';
 
 export default function Layout({ children }) {
+  const { state } = useStateValue();
+
   return (
     <div>
       <NavBar/>
@@ -25,7 +30,10 @@ export default function Layout({ children }) {
           <meta name="og:title" content={siteTitle} />
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
-        <main className={styles.content}>{children}</main>
+          <main className={styles.content}>
+            {state.isLoading ? <Spinner/> : null}
+            {children}
+          </main>
       </div>
       <Footer />
     </div>

@@ -15,9 +15,3 @@
 .input::placeholder {
     color: var(--primary-color);
 }
-
-.input_horizontal_container {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-}

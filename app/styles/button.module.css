@@ -16,3 +16,7 @@
     pointer-events: none;
     opacity: 0.5;
   }
+
+  .button:hover {
+    background-color: var(--primary-light-color);
+  }

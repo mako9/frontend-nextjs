@@ -6,13 +6,14 @@ import Head from 'next/head';
 import KeyValue from '../keyValue';
 import Button from '../button';
 import { joinCommunity } from '../../lib/communities';
+import Spinner from '../spinner';
 
 export default function foreignCommunity(session, communityData, t) {
     const Map = dynamic(
       () => import('../map'),
       { 
         loading: () => <div className={`${styles.map} ${styles.map_default_background}`} >
-          <p>A map is loading...</p>
+          <Spinner/>
         </div>,
         ssr: false
       }
