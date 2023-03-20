@@ -1,0 +1,49 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .inner_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    column-gap: 10px;
+    width: 100%;
+  }
+
+.image_gallery_container {
+    width: 300px;
+    height: 300px;
+    overflow-x: flow;
+}
+
+  .image_gallery {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .image {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: none;
+  }
+
+  .gallery_button {
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+  }
+
+  .gallery_button:hover {
+    background-color: var(--primary-light-color);
+  }
+  

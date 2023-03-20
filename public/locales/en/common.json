@@ -3,6 +3,9 @@
     "delete": "Delete",
     "select": "Select",
     "pleaseSelect": "Please select ...",
+    "selectedFile": "Selected file:",
+    "noFileSelected": "No file selected",
+    "image": "Image",
     "name": "Name",
     "address": "Address",
     "street": "Street",
@@ -55,6 +58,9 @@
             "tool": "Tool",
             "electicDevice": "Electic Device",
             "other": "Other"
-        }
+        },
+        "images": "Images",
+        "uploadImage": "Upload image",
+        "deleteImage": "Delete image"
     }
 }

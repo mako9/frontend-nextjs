@@ -88,17 +88,17 @@ export default function ownedCommunity(session, communityData, members, requesti
         <Input input={name} setInput={setName} placeholder={t('name')} className={'input_left'}/>
         <br/><br/>
         <h3>{t('address')}</h3>
-        <div className={inputStyles.input_horizontal_container}>
+        <div className="horizontal_container">
           <Input input={street} setInput={setStreet} placeholder={t('street')} className={'input_left'}/>
           <Input input={houseNumber} setInput={setHouseNumber} placeholder={t('houseNumber')}className={'input_right'}/>
         </div>
-        <div className="spacer"/>
-        <div className={inputStyles.input_horizontal_container}>
+        <div className="vertical_spacer"/>
+        <div className="horizontal_container">
           <Input input={postalCode} setInput={setPostalCode} placeholder={t('postalCode')} className={'input_left'}/>
           <Input input={city} setInput={setCity} placeholder={t('city')} className={'input_right'}/>
         </div>
         <br/>
-        <div className={inputStyles.input_horizontal_container}>
+        <div className="horizontal_container">
           <text className={keyStyles.key}>{t('community.canBeJoined')}</text>
           <input
             className={inputStyles.input_right}

@@ -39,10 +39,28 @@ p {
   background-color: var(--primary-color);
 }
 
-.spacer {
+.vertical_spacer {
   height: 10px;
 }
 
+.horizontal_spacer {
+  width: 10px;
+}
+
+.horizontal_container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.truncate {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap');
 * {
@@ -52,7 +70,7 @@ p {
   box-sizing: border-box;
   font-family: 'Work Sans', sans-serif;
 }
-a{
+a {
   text-decoration: none;
   color: inherit;
 }

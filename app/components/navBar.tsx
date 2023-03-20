@@ -30,9 +30,7 @@ const NavBar = () => {
   if (isLoggedIn) menuList.push({ text: t('navBar.myArea'), href: "/my-area" })
 
   useEffect(() => {
-    console.log(data?.status === 'authenticated')
     setIsLoggedIn(data !== null && data?.status === 'authenticated');
-    console.log(isLoggedIn)
   }, [data]);
 
   return (
