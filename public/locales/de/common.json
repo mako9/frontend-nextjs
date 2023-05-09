@@ -30,7 +30,9 @@
     },
     "myArea": {
         "communities": "Communities",
-        "items": "Items"
+        "items": "Items",
+        "createCommunity": "Erstelle Community",
+        "createItem": "Erstelle Item"
     },
     "community": {
         "community": "Community",
@@ -41,7 +43,8 @@
         "noMembersExist": "Keine Mitglieder vorhanden",
         "noRequestsExist": "Keine Anfragen vorhanden",
         "requestMembership": "Mitgliedschaft anfragen",
-        "canBeJoined": "Können Nutzer der Community beitreten?"
+        "canBeJoined": "Können Nutzer der Community beitreten?",
+        "radius": "Radius"
     },
     "user": {
         "firstName": "First name",
