@@ -5,7 +5,7 @@ export async function request<Type>(
     url: string,
     session: Session,
     method: HttpMethod = HttpMethod.Get,
-    data = null,
+    data: any = null,
     contentType: MimeType = MimeType.json,
     accept: MimeType = MimeType.json
 ): Promise<HttpResponse<Type>> {
@@ -32,7 +32,7 @@ async function httpRequest<Type>(
     accept: MimeType,
     accessToken: String,
     method: HttpMethod,
-    data
+    data: any
 ): Promise<HttpResponse<Type>> {
     var headers = getRequestHeaders(accessToken, contentType, accept);
     var body = getRequestBody(data, contentType)
@@ -98,7 +98,7 @@ function getRequestHeaders(token: String, contentType: MimeType, accept: MimeTyp
     return headers;
 }
 
-function getRequestBody(data, contentType: MimeType) {
+function getRequestBody(data: any, contentType: MimeType) {
     if (data == null) {
         return null;
     }

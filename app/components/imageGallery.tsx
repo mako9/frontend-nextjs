@@ -35,6 +35,7 @@ function ImageGallery({ images, currentImageIndex, setCurrentImageIndex, t }) {
         <img src='/icons/arrow_right.svg' />
     </button> : null}
     </div>
+    <br/>
     <text>{t('image')} {currentImageIndex + 1}</text>
 </div> : null
   )

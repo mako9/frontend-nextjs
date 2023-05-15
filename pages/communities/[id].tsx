@@ -1,4 +1,4 @@
-import { getCommunity, getMemberOfCommunity, getReguestingMemberOfCommunity } from '../../app/lib/communities'
+import { getCommunity, getMemberOfCommunity, getReguestingMemberOfCommunity } from '../../app/lib/communities';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { getServerSideSession } from '../../app/utils/session';

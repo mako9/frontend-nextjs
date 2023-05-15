@@ -35,17 +35,17 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
     const [community, setCommunity] = useState(initialCommunity ? { id: initialCommunity.uuid, label: initialCommunity.name } : null);
     const initialCategories = itemData.categories.map(category => itemCategories.find(e => e.id === category));
     const [categories, setCategories] = useState(initialCategories);
-    const [images, setImages] = useState([]);
+    const [imageUrls, setImageUrls] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         async function loadImages() {
-            let itemImages = [];
+            let itemImageUrls = [];
             for (const itemImageUuid of itemImageData) {
                 const itemImageBlob = await getItemImage(itemImageUuid, session);
-                itemImages.push(URL.createObjectURL(itemImageBlob));
+                itemImageUrls.push(URL.createObjectURL(itemImageBlob));
             }
-            setImages(itemImages);
+            setImageUrls(itemImageUrls);
         }
         loadImages();
     }, []);
@@ -54,10 +54,10 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
     const deleteItemWithLoading = clientSideRequest(deleteItem, state, setState);
     const deleteItemImageWithLoading = clientSideRequest(deleteItemImage, state, setState);
     const uploadImageWithLoading = clientSideRequest(uploadItemImage, state, setState);
-    const onHandleImageUpload = async (uploadImage) => {
+    const onHandleImageUpload = async (uploadImage: File) => {
         await uploadImageWithLoading(itemData.uuid, uploadImage, session);
-        const newImages = images.concat([URL.createObjectURL(uploadImage)]);
-        setImages(newImages);
+        const newImages = imageUrls.concat([URL.createObjectURL(uploadImage)]);
+        setImageUrls(newImages);
         const newIndex = newImages.length - 1;
         setCurrentImageIndex(newIndex);
     }
@@ -69,8 +69,8 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
         await deleteItemImageWithLoading(itemImageData[currentImageIndex], session);
         const newIndex = currentImageIndex - 1;
         setCurrentImageIndex(newIndex);
-        images.splice(currentImageIndex, 1)
-        setImages(images);
+        imageUrls.splice(currentImageIndex, 1)
+        setImageUrls(imageUrls);
     }
     
     return (
@@ -83,13 +83,13 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
             </article>
             <h3>{t('item.images')}</h3>
             <div>
-                {images.length > 0 ? <div className="horizontal_container">
-                    <ImageGallery images={images} currentImageIndex={currentImageIndex} setCurrentImageIndex={setCurrentImageIndex} t={t} />
+                {imageUrls.length > 0 ? <div className="horizontal_container">
+                    <ImageGallery images={imageUrls} currentImageIndex={currentImageIndex} setCurrentImageIndex={setCurrentImageIndex} t={t} />
                     <div>
                         <Button title={t('item.deleteImage')} onClick={onHandleItemImageDelete} />
                     </div>
                 </div> : null}
-                {images.length > 0 ? <br/> : null}
+                {imageUrls.length > 0 ? <br/> : null}
                 <FileUpload title={t('item.uploadImage')} handleUploadedFile={onHandleImageUpload} t={t} />
             </div>
             <br/>

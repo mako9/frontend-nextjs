@@ -124,7 +124,7 @@ const Dropdown = ({
   const getOptions = () => {
     const remainingOptions = isMulti ?
       options.filter(option => !selectedValue.map(e => e.id).includes(option.id)) : 
-      options.filter(option => selectedValue.id !== option.id);
+      options.filter(option => selectedValue?.id !== option.id);
     if (!searchValue) {
       return remainingOptions;
     }
