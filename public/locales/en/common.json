@@ -25,8 +25,9 @@
         "goToSignup": "Go to sign up page"
     },
     "index": {
-        "header": "This is the beginning of something bigger.",
-        "tableHeader": "Communities"
+        "header": "Find your next item.",
+        "availableItems": "Available items",
+        "availableCommunities": "Available communities"
     },
     "myArea": {
         "communities": "Communities",

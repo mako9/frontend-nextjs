@@ -1,5 +1,5 @@
 import Head from "next/head";
-import utilStyles from '../../app/styles/utils.module.css';
+import utilStyles from '../../styles/utils.module.css';
 
 export default function foreignCommunity(session, itemData, t) {
     return (

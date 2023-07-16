@@ -105,8 +105,9 @@ function getRequestBody(data: any, contentType: MimeType) {
     switch (contentType) {
         case MimeType.formData:
             const formData = new FormData();
-            formData.append('file', data, 'file');
-            formData.append('fileName', 'test');
+            formData.append('file', data, data.name);
+            formData.append('fileName', data.name);
+            formData.append('type', data.type);
             return formData;
         case MimeType.json:
             return JSON.stringify(data);

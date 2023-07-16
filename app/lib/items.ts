@@ -2,6 +2,12 @@ import { Item } from "../models/item";
 import { Page } from "../models/page";
 import { MimeType, HttpMethod, request } from "../utils/request";
 
+export async function getAllItemsOfMyCommunities(session?): Promise<Page<Item>> {
+  const url = `${process.env.BACKEND_BASE_URL}/user/item/my`;
+  const result = await request<Page<Item>>(url, session);
+  return result.data;
+}
+
 export async function getOwnedItems(session?): Promise<Page<Item>> {
   const url = `${process.env.BACKEND_BASE_URL}/user/item/owned`;
   const result = await request<Page<Item>>(url, session);

@@ -13,4 +13,5 @@ export type Item = {
     availableUntil: string;
     description: string;
     communityName: string;
+    firstImageUuid: string;
 };

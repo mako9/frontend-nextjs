@@ -25,8 +25,9 @@
         "goToSignup": "Zur Registrierungsseite"
     },
     "index": {
-        "header": "Das ist der Beginn von etwas größerem.",
-        "tableHeader": "Communities"
+        "header": "Finde dein nächstes Item.",
+        "availableItems": "Verfügbare Items",
+        "availableCommunities": "Verfügbare Communities"
     },
     "myArea": {
         "communities": "Communities",

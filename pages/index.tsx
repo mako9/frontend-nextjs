@@ -2,20 +2,25 @@ import Head from 'next/head';
 import { siteTitle } from '../app/components/layout';
 import utilStyles from '../app/styles/utils.module.css';
 import { getAllCommunities } from '../app/lib/communities';
+import { getAllItemsOfMyCommunities, getItemImage } from '../app/lib/items';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import Router from 'next/router'
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { getServerSideSession } from '../app/utils/session';
+import Gallery from '../app/components/gallery';
+import { useState } from "react";
 
 export const getServerSideProps = async (context) => {
   const session = await getServerSideSession(context);
   const allCommunitiesData = await getAllCommunities(session);
+  const allItemsData = await getAllItemsOfMyCommunities(session);
   return {
     props: {
       allCommunitiesData: allCommunitiesData ? allCommunitiesData.content : [],
+      allItemsData: allItemsData ? allItemsData.content : [],
       ...(await serverSideTranslations(context.locale ?? 'en', [
         'common',
       ])),
@@ -23,15 +28,39 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-export default function Home({ allCommunitiesData }) {
+export default function Home({ allCommunitiesData, allItemsData }) {
+  const router = useRouter();
   const { t } = useTranslation('common');
-  const { data } = useSession();
+  const session = useSession().data;
 
   useEffect(() => {
-    if (data?.status === 'unauthenticated') {
-      Router.push('/login')
+    if (session?.status === 'unauthenticated' || new Date(session.expires) < new Date()) {
+      router.push('/login')
     }
-  }, [data]);
+  }, [session]);
+
+  const [imageUrls, setImageUrls] = useState([]);
+
+  useEffect(() => {
+    async function loadImages() {
+        let itemImageUrls = [];
+        for (const item of allItemsData) {
+            const itemImageBlob = await getItemImage(item.firstImageUuid, session);
+            if (itemImageBlob) {
+              itemImageUrls.push({
+                uuid: item.uuid,
+                imageUrl: URL.createObjectURL(itemImageBlob) });
+            }
+        }
+        setImageUrls(itemImageUrls);
+    }
+    loadImages();
+  }, []);
+
+  function onItemClick(uuid) {
+    console.log(uuid)
+    router.push(`/items/${uuid}`)
+  }
 
   return (
     <div>
@@ -42,7 +71,12 @@ export default function Home({ allCommunitiesData }) {
         <p>{t('index.header')}</p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>{t('index.tableHeader')}</h2>
+        <ul className={utilStyles.list}>
+          <Gallery items={allItemsData} title={t('index.availableItems')} images={imageUrls} onClick={onItemClick} />
+        </ul>
+      </section>
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>{t('index.availableCommunities')}</h2>
         <ul className={utilStyles.list}>
           {allCommunitiesData.map(({ uuid, name }) => (
             <li className={utilStyles.listItem} key={uuid}>
