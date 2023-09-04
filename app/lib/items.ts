@@ -1,14 +1,14 @@
 import { Item } from "../models/item";
-import { Page } from "../models/page";
+import { Page } from "../models/pageModel";
 import { MimeType, HttpMethod, request } from "../utils/request";
 
-export async function getOwnedItems(session?): Promise<Page<Item>> {
+export async function getOwnedItems(session?): Promise<Page<Item> | null> {
   const url = `${process.env.BACKEND_BASE_URL}/user/item/owned`;
   const result = await request<Page<Item>>(url, session);
   return result.data;
 }
 
-export async function getItem(uuid, session?): Promise<Item> {
+export async function getItem(uuid, session?): Promise<Item | null> {
   const url = `${process.env.BACKEND_BASE_URL}/user/item/${uuid}`;
   const result = await request<Item>(url, session);
   return result.data;
@@ -19,21 +19,21 @@ export async function deleteItem(uuid, session?) {
   await request<Item>(url, session, HttpMethod.Delete);
 }
 
-export async function editItem(item: Item, session?): Promise<Item> {
+export async function editItem(item: Item, session?): Promise<Item | null> {
   const url = `${process.env.BACKEND_BASE_URL}/user/item/${item.uuid}`;
   const result = await request<Item>(url, session, HttpMethod.Patch, item);
   return result.data;
 }
 
-export async function getItemImageUuids(uuid, session?): Promise<[String]> {
+export async function getItemImageUuids(uuid, session?): Promise<[String] | null> {
   const url = `${process.env.BACKEND_BASE_URL}/user/item/${uuid}/image`;
   const result = await request<[String]>(url, session);
   return result.data;
 }
 
-export async function getItemImage(uuid, session?): Promise<Blob> {
+export async function getItemImage(uuid, session?): Promise<Blob | null> {
   const url = `${process.env.BACKEND_BASE_URL}/user/item/image/${uuid}`;
-  const result = await request<Blob>(url, session, HttpMethod.Get, null, null, MimeType.octetStream);
+  const result = await request<Blob>(url, session, HttpMethod.Get, null, MimeType.json, MimeType.octetStream);
   return result.data;
 }
 

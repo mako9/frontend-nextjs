@@ -21,7 +21,7 @@ export default function ownedCommunity(session, communityData, members, requesti
     const [postalCode, setPostalCode] = useState(communityData.postalCode);
     const [city, setCity] = useState(communityData.city);
     const [canBeJoined, setCanBeJoined] = useState(communityData.canBeJoined);
-    const [userUuids, setUserUuids] = useState([]);
+    const [userUuids, setUserUuids] = useState<String[]>([]);
   
     const editCommunityWithLoading = clientSideRequest(editCommunity, state, setState);
     const deleteCommunityWithLoading = clientSideRequest(deleteCommunity, state, setState);
@@ -40,9 +40,9 @@ export default function ownedCommunity(session, communityData, members, requesti
     router.reload();
 }
     const handleListCheckboxChange = (row, isChecked) => {
-      const userUuid = requestingMember.content[row.index]?.uuid
+      const userUuid = requestingMember.content[row.index]?.uuid as String;
       if (userUuid) {
-        if (isChecked) { setUserUuids([].concat(userUuids, [userUuid])) }
+        if (isChecked) { setUserUuids(([] as String[]).concat(userUuids, [userUuid])) }
         else { setUserUuids(userUuids.filter(value => value != userUuid)) }
       }
     };
@@ -59,7 +59,7 @@ export default function ownedCommunity(session, communityData, members, requesti
       }
     ]
 
-    const requestColumns = [].concat(userColumns, [
+    const requestColumns = ([] as any[]).concat(userColumns, [
         {
           Header: t('select'),
           Cell: ({ row }) => (
