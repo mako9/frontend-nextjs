@@ -6,7 +6,7 @@ import Input from "../input";
 import { useEffect, useState } from "react";
 import Button from "../button";
 import { getItemImage, deleteItem, editItem, uploadItemImage, deleteItemImage } from "../../lib/items";
-import Dropdown from "../dropdown";
+import Dropdown, { DropdownOption } from "../dropdown";
 import { clientSideRequest } from "../../utils/request";
 import { useStateValue } from "../../components/context";
 import { useRouter } from 'next/router';
@@ -32,18 +32,18 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
     const [city, setCity] = useState(itemData.city);
     const [isActive, setIsActive] = useState(itemData.active);
     const initialCommunity = myCommunities.find(e => e.uuid === itemData.communityUuid);
-    const [community, setCommunity] = useState(initialCommunity ? { id: initialCommunity.uuid, label: initialCommunity.name } : null);
+    const [community, setCommunity] = useState<DropdownOption | null>(initialCommunity ? { id: initialCommunity.uuid, label: initialCommunity.name } : null);
     const initialCategories = itemData.categories.map(category => itemCategories.find(e => e.id === category));
     const [categories, setCategories] = useState(initialCategories);
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState<String[]>([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         async function loadImages() {
-            let itemImages = [];
+            let itemImages: String[] = [];
             for (const itemImageUuid of itemImageData) {
-                const itemImageBlob = await getItemImage(itemImageUuid, session);
-                itemImages.push(URL.createObjectURL(itemImageBlob));
+                const itemImageBlob: Blob | null = await getItemImage(itemImageUuid, session);
+                if(itemImageBlob) itemImages.push(URL.createObjectURL(itemImageBlob));
             }
             setImages(itemImages);
         }
@@ -124,7 +124,7 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
                 isMulti={false}
                 isSearchable={true}
                 onChange={(value) => setCommunity(value)}
-                initialOption={community}
+                initialOption={community ? [community] : []}
             />
             <br/>
             <h3>{t('item.category.category')}</h3>
@@ -147,7 +147,7 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
                 name: name,
                 active: isActive,
                 categories: categories.map((category) => category.id),
-                communityUuid: community.id,
+                communityUuid: community ? community.id : null,
                 userUuid: itemData.userUuid,
                 availability: itemData.availability,
                 availableUntil: itemData.availableUntil,
