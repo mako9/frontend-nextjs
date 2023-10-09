@@ -28,5 +28,8 @@ jobs:
     - name: Install pnpm
       run: npm install -g pnpm
     - run: pnpm install
-    - run: pnpm run build --if-present
+    - run: |
+        if [ -f "pnpm run build" ]; then
+          pnpm run build
+        fi
     - run: pnpm run test-ci
