@@ -5,8 +5,8 @@ import http from 'http';
 import { Logger } from 'pino';
 
 interface LoggerServer extends http.Server {
-    logger: Logger;
-  }
+  logger: Logger;
+}
 
 let logger;
 

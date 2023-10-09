@@ -49,7 +49,7 @@ async function refreshAccessToken(token) {
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     }
   } catch (error) {
-    logger.log(error)
+    logger.warn(error)
 
     return {
       ...token,
