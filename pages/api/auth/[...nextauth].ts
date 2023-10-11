@@ -21,8 +21,8 @@ async function refreshAccessToken(token) {
       `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`
       
       const formParams = new URLSearchParams({
-        client_id: process.env.KEYCLOAK_CLIENT_ID,
-        client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
+        client_id: process.env.KEYCLOAK_CLIENT_ID as string,
+        client_secret: process.env.KEYCLOAK_CLIENT_SECRET as string,
         grant_type: "refresh_token",
         refresh_token: token.refreshToken,
       })
@@ -49,7 +49,7 @@ async function refreshAccessToken(token) {
       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     }
   } catch (error) {
-    logger.log(error)
+    logger.warn(error)
 
     return {
       ...token,
@@ -63,8 +63,8 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     KeycloakProvider({
-        clientId: process.env.KEYCLOAK_CLIENT_ID,
-        clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
+        clientId: process.env.KEYCLOAK_CLIENT_ID as string,
+        clientSecret: process.env.KEYCLOAK_CLIENT_SECRET as string,
         issuer: process.env.KEYCLOAK_ISSUER
       })
   ],

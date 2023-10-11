@@ -24,13 +24,20 @@ const Dropdown = ({
   isMulti,
   isSearchable,
   onChange,
-  initialOption = null
+  initialOption = []
+}: {
+  placeHolder: string;
+  options: DropdownOption[];
+  isMulti: boolean;
+  isSearchable: boolean;
+  onChange: (DropdownOption) => void;
+  initialOption: DropdownOption[];
 }) => {
   const [showMenu, setShowMenu] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(initialOption);
+  const [selectedValue, setSelectedValue] = useState<DropdownOption[]>(initialOption);
   const [searchValue, setSearchValue] = useState("");
-  const searchRef = useRef<HTMLInputElement>();
-  const inputRef = useRef<HTMLInputElement>();
+  const searchRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setSearchValue("");
@@ -76,7 +83,7 @@ const Dropdown = ({
         </div>
       );
     }
-    return selectedValue.label;
+    return selectedValue[0].label;
   };
 
   const removeOption = (option) => {
@@ -114,7 +121,7 @@ const Dropdown = ({
       return false;
     }
 
-    return selectedValue.id === option.id;
+    return selectedValue[0].id === option.id;
   };
 
   const onSearch = (e) => {
@@ -124,7 +131,7 @@ const Dropdown = ({
   const getOptions = () => {
     const remainingOptions = isMulti ?
       options.filter(option => !selectedValue.map(e => e.id).includes(option.id)) : 
-      options.filter(option => selectedValue?.id !== option.id);
+      options.filter(option => selectedValue[0].id !== option.id);
     if (!searchValue) {
       return remainingOptions;
     }

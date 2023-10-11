@@ -11,7 +11,7 @@ export async function request<Type>(
 ): Promise<HttpResponse<Type>> {
     const accessToken = await getAccessToken(session);
     if (!accessToken) {
-        if (session) session.accessToken = null;
+        if (session) session.accessToken = '';
         logger.info(`REQUEST: ${url} | Missing access token`);
         return {
             data: null,
@@ -21,7 +21,7 @@ export async function request<Type>(
     }
     var result = await httpRequest<Type>(url, contentType, accept, accessToken, method, data);
     if (result.statusCode === 401) {
-        if (session) session.accessToken = null;
+        if (session) session.accessToken = '';
     };
     return result;
 }
@@ -132,9 +132,9 @@ async function getAccessToken(session): Promise<String> {
 }
 
 export type HttpResponse<Type> = {
-    data: Type;
+    data: Type | null;
     statusCode: number;
-    errorMessage: string;
+    errorMessage: string | null;
 };
 
 export enum HttpMethod {

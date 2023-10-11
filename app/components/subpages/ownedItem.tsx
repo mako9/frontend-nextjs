@@ -6,7 +6,7 @@ import Input from "../input";
 import { useEffect, useState } from "react";
 import Button from "../button";
 import { getItemImage, deleteItem, editItem, uploadItemImage, deleteItemImage } from "../../lib/items";
-import Dropdown from "../dropdown";
+import Dropdown, { DropdownOption } from "../dropdown";
 import { clientSideRequest } from "../../utils/request";
 import { useStateValue } from "../../components/context";
 import { useRouter } from 'next/router';
@@ -32,20 +32,20 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
     const [city, setCity] = useState(itemData.city);
     const [isActive, setIsActive] = useState(itemData.active);
     const initialCommunity = myCommunities.find(e => e.uuid === itemData.communityUuid);
-    const [community, setCommunity] = useState(initialCommunity ? { id: initialCommunity.uuid, label: initialCommunity.name } : null);
+    const [community, setCommunity] = useState<DropdownOption | null>(initialCommunity ? { id: initialCommunity.uuid, label: initialCommunity.name } : null);
     const initialCategories = itemData.categories.map(category => itemCategories.find(e => e.id === category));
     const [categories, setCategories] = useState(initialCategories);
-    const [imageUrls, setImageUrls] = useState([]);
+    const [images, setImages] = useState<String[]>([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         async function loadImages() {
-            let itemImageUrls = [];
+            let itemImages: String[] = [];
             for (const itemImageUuid of itemImageData) {
-                const itemImageBlob = await getItemImage(itemImageUuid, session);
-                itemImageUrls.push(URL.createObjectURL(itemImageBlob));
+                const itemImageBlob: Blob | null = await getItemImage(itemImageUuid, session);
+                if(itemImageBlob) itemImages.push(URL.createObjectURL(itemImageBlob));
             }
-            setImageUrls(itemImageUrls);
+            setImages(itemImages);
         }
         loadImages();
     }, []);
@@ -56,8 +56,8 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
     const uploadImageWithLoading = clientSideRequest(uploadItemImage, state, setState);
     const onHandleImageUpload = async (uploadImage: File) => {
         await uploadImageWithLoading(itemData.uuid, uploadImage, session);
-        const newImages = imageUrls.concat([URL.createObjectURL(uploadImage)]);
-        setImageUrls(newImages);
+        const newImages = images.concat([URL.createObjectURL(uploadImage)]);
+        setImages(newImages);
         const newIndex = newImages.length - 1;
         setCurrentImageIndex(newIndex);
     }
@@ -69,8 +69,8 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
         await deleteItemImageWithLoading(itemImageData[currentImageIndex], session);
         const newIndex = currentImageIndex - 1;
         setCurrentImageIndex(newIndex);
-        imageUrls.splice(currentImageIndex, 1)
-        setImageUrls(imageUrls);
+        images.splice(currentImageIndex, 1)
+        setImages(images);
     }
     
     return (
@@ -83,13 +83,13 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
             </article>
             <h3>{t('item.images')}</h3>
             <div>
-                {imageUrls.length > 0 ? <div className="horizontal_container">
-                    <ImageGallery images={imageUrls} currentImageIndex={currentImageIndex} setCurrentImageIndex={setCurrentImageIndex} t={t} />
+                {images.length > 0 ? <div className="horizontal_container">
+                    <ImageGallery images={images} currentImageIndex={currentImageIndex} setCurrentImageIndex={setCurrentImageIndex} t={t} />
                     <div>
                         <Button title={t('item.deleteImage')} onClick={onHandleItemImageDelete} />
                     </div>
                 </div> : null}
-                {imageUrls.length > 0 ? <br/> : null}
+                {images.length > 0 ? <br/> : null}
                 <FileUpload title={t('item.uploadImage')} handleUploadedFile={onHandleImageUpload} t={t} />
             </div>
             <br/>
@@ -124,7 +124,7 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
                 isMulti={false}
                 isSearchable={true}
                 onChange={(value) => setCommunity(value)}
-                initialOption={community}
+                initialOption={community ? [community] : []}
             />
             <br/>
             <h3>{t('item.category.category')}</h3>
@@ -147,7 +147,7 @@ export default function ownedItem(session, itemData, itemImageData, myCommunitie
                 name: name,
                 active: isActive,
                 categories: categories.map((category) => category.id),
-                communityUuid: community.id,
+                communityUuid: community ? community.id : null,
                 userUuid: itemData.userUuid,
                 availability: itemData.availability,
                 availableUntil: itemData.availableUntil,

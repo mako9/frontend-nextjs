@@ -3,7 +3,7 @@ import Button from './button';
 import styles from '../styles/fileUpload.module.css';
 
 export default function FileUpload({ title, handleUploadedFile, t }) {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
 
   function handleFileSelection(event) {
     const selectedFile = event.target.files[0];

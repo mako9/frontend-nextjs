@@ -15,3 +15,8 @@ export type Item = {
     communityName: string;
     firstImageUuid: string;
 };
+
+export type ItemImage = {
+    uuid: string;
+    imageUrl: string;
+};
