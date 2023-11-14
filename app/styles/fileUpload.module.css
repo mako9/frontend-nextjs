@@ -12,21 +12,21 @@
     align-items: center;
     padding-right: 8px;
     height: 50px;
-  }
-  
-  .file_upload:hover {
+}
+
+.file_upload:hover {
     background-color: var(--primary-light-color);
-  }
+}
 
-  .file_input {
+.file_input {
     display: none;
-  }
+}
 
-  .file_upload_icon {
-    height: 50px; 
+.file_upload_icon {
+    height: 50px;
     width: relative;
     background-color: var(--primary-color);
     border: none;
     border-radius: 10px;
     padding: 12px 12px;
-  }
+}

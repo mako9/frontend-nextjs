@@ -1,11 +1,11 @@
-  .gallery {
+.gallery {
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto; /* Enable vertical scrolling */
     max-height: 400px; /* Set a maximum height for the gallery */
-  }
+}
 
-  .gallery_item {
+.gallery_item {
     width: 45%; /* Show two cards per row */
     background-color: #f2f2f2;
     padding: 20px;
@@ -17,15 +17,14 @@
     justify-content: center;
     align-items: center;
     background-color: var(--primary-light-color);
-  }
+}
 
-  .gallery_item:hover {
+.gallery_item:hover {
     background-color: var(--primary-color);
-  }
+}
 
-  .gallery_title {
+.gallery_title {
     display: flex;
     align-items: center;
     padding-top: 5px;
-  }
-  
+}

@@ -7,19 +7,19 @@
     border: 1px solid var(--primary-color);
     box-shadow: none;
     font-size: 16px;
-  }
+}
 
-  .toggle_button_left {
+.toggle_button_left {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-  }
+}
 
-  .toggle_button_right {
+.toggle_button_right {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-  }
-  
-  .toggle_button_on {
+}
+
+.toggle_button_on {
     background-color: var(--primary-color);
     font-weight: bold;
-  }
+}

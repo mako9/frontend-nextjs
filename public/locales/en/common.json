@@ -53,6 +53,7 @@
     },
     "item": {
         "item": "Item",
+        "description": "Description",
         "isActive": "Is active?",
         "relatedCommunity": "Related community:",
         "category": {
@@ -65,6 +66,9 @@
         },
         "images": "Images",
         "uploadImage": "Upload image",
-        "deleteImage": "Delete image"
+        "deleteImage": "Delete image",
+        "requestItem": "Request item",
+        "desiredBookingStartDate": "Desired start date",
+        "desiredBookingEndDate": "Desired end date"
     }
 }

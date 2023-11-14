@@ -1,4 +1,4 @@
 export type State = {
-    selectedNavbarIndex: number;
-    isLoading: boolean;
-};
+    selectedNavbarIndex: number
+    isLoading: boolean
+}
