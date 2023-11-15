@@ -25,12 +25,15 @@
         "goToSignup": "Go to sign up page"
     },
     "index": {
-        "header": "This is the beginning of something bigger.",
-        "tableHeader": "Communities"
+        "header": "Find your next item.",
+        "availableItems": "Available items",
+        "availableCommunities": "Available communities"
     },
     "myArea": {
         "communities": "Communities",
-        "items": "Items"
+        "items": "Items",
+        "createCommunity": "Create Community",
+        "createItem": "Create Item"
     },
     "community": {
         "community": "Community",
@@ -41,7 +44,8 @@
         "noMembersExist": "No members exist",
         "noRequestsExist": "No requests exist",
         "requestMembership": "Request membership",
-        "canBeJoined": "User can join community?"
+        "canBeJoined": "User can join community?",
+        "radius": "Radius"
     },
     "user": {
         "firstName": "First name",
@@ -49,6 +53,7 @@
     },
     "item": {
         "item": "Item",
+        "description": "Description",
         "isActive": "Is active?",
         "relatedCommunity": "Related community:",
         "category": {
@@ -61,6 +66,9 @@
         },
         "images": "Images",
         "uploadImage": "Upload image",
-        "deleteImage": "Delete image"
+        "deleteImage": "Delete image",
+        "requestItem": "Request item",
+        "desiredBookingStartDate": "Desired start date",
+        "desiredBookingEndDate": "Desired end date"
     }
 }

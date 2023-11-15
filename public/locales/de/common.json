@@ -25,12 +25,15 @@
         "goToSignup": "Zur Registrierungsseite"
     },
     "index": {
-        "header": "Das ist der Beginn von etwas größerem.",
-        "tableHeader": "Communities"
+        "header": "Finde dein nächstes Item.",
+        "availableItems": "Verfügbare Items",
+        "availableCommunities": "Verfügbare Communities"
     },
     "myArea": {
         "communities": "Communities",
-        "items": "Items"
+        "items": "Items",
+        "createCommunity": "Erstelle Community",
+        "createItem": "Erstelle Item"
     },
     "community": {
         "community": "Community",
@@ -41,7 +44,8 @@
         "noMembersExist": "Keine Mitglieder vorhanden",
         "noRequestsExist": "Keine Anfragen vorhanden",
         "requestMembership": "Mitgliedschaft anfragen",
-        "canBeJoined": "Können Nutzer der Community beitreten?"
+        "canBeJoined": "Können Nutzer der Community beitreten?",
+        "radius": "Radius"
     },
     "user": {
         "firstName": "First name",
@@ -49,6 +53,7 @@
     },
     "item": {
         "item": "Item",
+        "description": "Beschreibung",
         "isActive": "Ist aktiv?",
         "relatedCommunity": "Verknüpfte Community:",
         "category": {
@@ -61,6 +66,9 @@
         },
         "images": "Bilder",
         "uploadImage": "Bild hochladen",
-        "deleteImage": "Bild löschen"
+        "deleteImage": "Bild löschen",
+        "requestItem": "Item anfragen",
+        "desiredBookingStartDate": "Gewünschtes Startdatum",
+        "desiredBookingEndDate": "Gewünschtes Enddatum"
     }
 }

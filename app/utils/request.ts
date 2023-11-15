@@ -1,5 +1,5 @@
-import { Session } from "next-auth";
-import logger from "./logger";
+import { Session } from 'next-auth'
+import logger from './logger'
 
 export async function request<Type>(
     url: string,
@@ -9,21 +9,28 @@ export async function request<Type>(
     contentType: MimeType = MimeType.json,
     accept: MimeType = MimeType.json
 ): Promise<HttpResponse<Type>> {
-    const accessToken = await getAccessToken(session);
+    const accessToken = await getAccessToken(session)
     if (!accessToken) {
-        if (session) session.accessToken = '';
-        logger.info(`REQUEST: ${url} | Missing access token`);
+        if (session) session.accessToken = ''
+        logger.info(`REQUEST: ${url} | Missing access token`)
         return {
             data: null,
             statusCode: 401,
-            errorMessage: 'Missing access token'
+            errorMessage: 'Missing access token',
         }
     }
-    var result = await httpRequest<Type>(url, contentType, accept, accessToken, method, data);
+    var result = await httpRequest<Type>(
+        url,
+        contentType,
+        accept,
+        accessToken,
+        method,
+        data
+    )
     if (result.statusCode === 401) {
-        if (session) session.accessToken = '';
-    };
-    return result;
+        if (session) session.accessToken = ''
+    }
+    return result
 }
 
 async function httpRequest<Type>(
@@ -32,121 +39,134 @@ async function httpRequest<Type>(
     accept: MimeType,
     accessToken: String,
     method: HttpMethod,
-    data
+    data: any
 ): Promise<HttpResponse<Type>> {
-    var headers = getRequestHeaders(accessToken, contentType, accept);
+    var headers = getRequestHeaders(accessToken, contentType, accept)
     var body = getRequestBody(data, contentType)
-    logger.debug(`REQUEST: ${method} ${url} | Headers: ${headers} | Body: ${body}`);
+    logger.debug(
+        `REQUEST: ${method} ${url} | Headers: ${headers} | Body: ${body}`
+    )
     const res = await fetch(url, {
         headers: headers,
         method: method,
         body: body,
-        mode: 'cors'
-    });
+        mode: 'cors',
+        credentials: 'include',
+    })
     if (!res.ok) {
-        var bodyString = res.statusText;
+        var bodyString = res.statusText
         try {
-            const jsonResponse = await res.json();
+            const jsonResponse = await res.json()
             bodyString = JSON.stringify(jsonResponse)
         } catch (err) {
             logger.debug('Could not parse response body:', err)
         }
-        logger.info(`RESPONSE: Status ${res.status} | Body: ${bodyString}`);
+        logger.info(`RESPONSE: Status ${res.status} | Body: ${bodyString}`)
         return {
             data: null,
             statusCode: res.status,
-            errorMessage: res.statusText
+            errorMessage: res.statusText,
         }
-    };
+    }
     try {
-        const data = await getData<Type>(res, accept);
+        const data = await getData<Type>(res, accept)
         return {
             data: data,
             statusCode: res.status,
-            errorMessage: null
+            errorMessage: null,
         }
     } catch (error) {
-        logger.error(`RESPONSE: Status ${res.status} | Body: ${res.body} | Error: ${error}`);
+        logger.error(
+            `RESPONSE: Status ${res.status} | Body: ${res.body} | Error: ${error}`
+        )
         return {
             data: null,
             statusCode: res.status,
-            errorMessage: error.message
-        };
+            errorMessage: error.message,
+        }
     }
 }
 
 export function clientSideRequest(originalFunction, state, setState) {
-    return async function(...args: any) {
-        setState({ ...state, isLoading: true });
-        const result = await originalFunction(...args);
-        setState({ ...state, isLoading: false });
-        return result;
-      }
+    return async function (...args: any) {
+        setState({ ...state, isLoading: true })
+        const result = await originalFunction(...args)
+        setState({ ...state, isLoading: false })
+        return result
+    }
 }
 
-function getRequestHeaders(token: String, contentType: MimeType, accept: MimeType) {
+function getRequestHeaders(
+    token: String,
+    contentType: MimeType,
+    accept: MimeType
+) {
     const headers = {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
     }
     // when sending a form with `fetch` in browser, don't set Content-Type header, because browser sets it automatically with correct 'boundary'.
     if (contentType && contentType !== MimeType.formData) {
-        headers['Content-Type'] = contentType;
+        headers['Content-Type'] = contentType
     }
     if (accept) {
-        headers['Accept'] = accept;
+        headers['Accept'] = accept
     }
-    return headers;
+    return headers
 }
 
-function getRequestBody(data, contentType: MimeType) {
+function getRequestBody(data: any, contentType: MimeType) {
     if (data == null) {
-        return null;
+        return null
     }
     switch (contentType) {
         case MimeType.formData:
-            const formData = new FormData();
-            formData.append('file', data);
-            formData.append('fileName', 'test');
-            return formData;
+            const formData = new FormData()
+            formData.append('file', data, data.name)
+            formData.append('fileName', data.name)
+            formData.append('type', data.type)
+            return formData
         case MimeType.json:
-            return JSON.stringify(data);
+            return JSON.stringify(data)
         default:
-            return data;
+            return data
     }
 }
 
-async function getData<Type>(response: Response, accept: MimeType): Promise<Type> {
+async function getData<Type>(
+    response: Response,
+    accept: MimeType
+): Promise<Type> {
     switch (accept) {
         case MimeType.octetStream:
-            return response.blob() as Type;
+            return response.blob() as Type
         case MimeType.json:
-            return await response.json() as Type;
+            return (await response.json()) as Type
         default:
-            return response.body as Type;
+            return response.body as Type
     }
 }
 
 async function getAccessToken(session): Promise<String> {
-    return session ? session.accessToken : null;
+    return session ? session.accessToken : null
 }
 
 export type HttpResponse<Type> = {
-    data: Type | null;
-    statusCode: number;
-    errorMessage: string | null;
-};
+    data: Type | null
+    statusCode: number
+    errorMessage: string | null
+}
 
 export enum HttpMethod {
     Get = 'GET',
     Post = 'POST',
     Patch = 'PATCH',
     Put = 'PUT',
-    Delete = 'DELETE'
-  }
+    Delete = 'DELETE',
+}
 
 export enum MimeType {
     json = 'application/json',
     formData = 'multipart/form-data',
     octetStream = 'application/octet-stream',
-    textPlain = 'text/plain'
+    textPlain = 'text/plain',
 }

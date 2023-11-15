@@ -1,17 +1,16 @@
-
 .footer {
-  background: var(--primary-color);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  justify-content: space-between;
-  align-items: center;
+    background: var(--primary-color);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.footer__menu_bar{
-  padding-bottom: 8px;
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
+.footer__menu_bar {
+    padding-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
 }

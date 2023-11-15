@@ -13,10 +13,26 @@ exports[`renders homepage unchanged 1`] = `
     <section
       class="headingMd padding1px"
     >
+      <ul
+        class="list"
+      >
+        <div>
+          <h1>
+            index.availableItems
+          </h1>
+          <div
+            class="gallery"
+          />
+        </div>
+      </ul>
+    </section>
+    <section
+      class="headingMd padding1px"
+    >
       <h2
         class="headingLg"
       >
-        index.tableHeader
+        index.availableCommunities
       </h2>
       <ul
         class="list"
