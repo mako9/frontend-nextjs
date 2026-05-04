@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import NavItem from './navItem'
 import { useSession, signOut } from 'next-auth/react'
 import styles from '../styles/nav.module.css'
-import { useTranslation } from 'next-i18next'
+import { useTranslation } from 'next-i18next/pages'
 import { useStateValue } from './context'
 
 const NavBar = () => {

@@ -146,7 +146,7 @@ async function getData<Type>(
     }
 }
 
-async function getAccessToken(session): Promise<String> {
+async function getAccessToken(session): Promise<string | null> {
     return session ? session.accessToken : null
 }
 

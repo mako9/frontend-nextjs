@@ -27,6 +27,12 @@ export async function deleteItem(uuid, session?) {
     await request<Item>(url, session, HttpMethod.Delete)
 }
 
+export async function createItem(item: Item, session?): Promise<Item | null> {
+    const url = `${process.env.BACKEND_BASE_URL}/user/item`
+    const result = await request<Item>(url, session, HttpMethod.Post, item)
+    return result.data
+}
+
 export async function editItem(item: Item, session?): Promise<Item | null> {
     const url = `${process.env.BACKEND_BASE_URL}/user/item/${item.uuid}`
     const result = await request<Item>(url, session, HttpMethod.Patch, item)

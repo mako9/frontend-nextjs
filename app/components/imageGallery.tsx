@@ -1,6 +1,5 @@
 import { useSwipeable } from 'react-swipeable'
 import styles from '../styles/imageGallery.module.css'
-import config from 'next/config'
 
 function ImageGallery({ images, currentImageIndex, setCurrentImageIndex, t }) {
     const handleNext = () => {
@@ -18,7 +17,6 @@ function ImageGallery({ images, currentImageIndex, setCurrentImageIndex, t }) {
         onSwipedRight: handlePrev,
         preventScrollOnSwipe: true,
         trackMouse: true,
-        ...config,
     })
 
     return images.length > 0 ? (

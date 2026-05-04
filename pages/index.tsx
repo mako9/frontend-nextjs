@@ -8,8 +8,8 @@ import Link from 'next/link'
 import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
+import { useTranslation } from 'next-i18next/pages'
 import { getServerSideSession } from '../app/utils/session'
 import Gallery from '../app/components/gallery'
 import { useState } from 'react'
@@ -40,6 +40,7 @@ export default function Home({ allCommunitiesData, allItemsData }) {
         if (
             session?.status === 'unauthenticated' ||
             !session ||
+            !session.accessToken ||
             new Date(session.expires) < new Date()
         ) {
             router.push('/login')
@@ -49,27 +50,32 @@ export default function Home({ allCommunitiesData, allItemsData }) {
     const [itemImages, setItemImages] = useState<ItemImage[]>([])
 
     useEffect(() => {
+        let objectUrls: string[] = []
         async function loadImages() {
-            let itemImages: ItemImage[] = []
+            let newItemImages: ItemImage[] = []
             for (const item of allItemsData) {
                 const itemImageBlob = await getItemImage(
                     item.firstImageUuid,
                     session
                 )
                 if (itemImageBlob) {
-                    itemImages.push({
+                    const url = URL.createObjectURL(itemImageBlob)
+                    objectUrls.push(url)
+                    newItemImages.push({
                         uuid: item.uuid,
-                        imageUrl: URL.createObjectURL(itemImageBlob),
+                        imageUrl: url,
                     })
                 }
             }
-            setItemImages(itemImages)
+            setItemImages(newItemImages)
         }
         loadImages()
+        return () => {
+            objectUrls.forEach((url) => URL.revokeObjectURL(url))
+        }
     }, [])
 
     function onItemClick(uuid) {
-        console.log(uuid)
         router.push(`/items/${uuid}`)
     }
 

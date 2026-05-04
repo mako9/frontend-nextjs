@@ -11,12 +11,12 @@ import keyStyles from '../../app/styles/keyValue.module.css'
 import { useStateValue } from '../../app/components/context'
 import { useRouter } from 'next/router'
 import { clientSideRequest } from '../../app/utils/request'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next/pages'
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import { useSession } from 'next-auth/react'
 import ImageGallery from '../../app/components/imageGallery'
-import FileUpload from '../../app/components/fileUpload'
-import Dropdown from '../../app/components/dropdown'
+import FileUpload from '../../app/components/FileUpload'
+import Dropdown, { DropdownOption } from '../../app/components/dropdown'
 
 export async function getServerSideProps(context) {
     const session = await getServerSideSession(context)
@@ -52,8 +52,8 @@ export default function createItemPage({ myCommunities }) {
     const [postalCode, setPostalCode] = useState(null)
     const [city, setCity] = useState(null)
     const [isActive, setIsActive] = useState(true)
-    const [categories, setCategories] = useState([])
-    const [community, setCommunity] = useState(
+    const [categories, setCategories] = useState<DropdownOption[]>([])
+    const [community, setCommunity] = useState<DropdownOption | null>(
         myCommunities.content.length > 0
             ? {
                   id: myCommunities.content[0].uuid,
@@ -61,16 +61,14 @@ export default function createItemPage({ myCommunities }) {
               }
             : null
     )
-    const [imageUrls, setImageUrls] = useState([])
-    const [imageFiles, setImageFiles] = useState([])
+    const [imageUrls, setImageUrls] = useState<string[]>([])
+    const [imageFiles, setImageFiles] = useState<File[]>([])
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const onHandleItemImageDelete = async () => {
-        const newIndex = currentImageIndex - 1
-        setCurrentImageIndex(newIndex)
-        imageUrls.splice(currentImageIndex, 1)
-        imageFiles.splice(currentImageIndex, 1)
-        setImageUrls(imageUrls)
-        setImageFiles(imageFiles)
+        URL.revokeObjectURL(imageUrls[currentImageIndex])
+        setImageUrls(imageUrls.filter((_, i) => i !== currentImageIndex))
+        setImageFiles(imageFiles.filter((_, i) => i !== currentImageIndex))
+        setCurrentImageIndex(Math.max(0, currentImageIndex - 1))
     }
     const onHandleImageUpload = async (uploadImageFile: File) => {
         const newImageUrls = imageUrls.concat([
@@ -100,7 +98,7 @@ export default function createItemPage({ myCommunities }) {
                 name: name,
                 active: isActive,
                 categories: categories.map((category) => category.id),
-                communityUuid: community.id,
+                communityUuid: community?.id ?? null,
                 userUuid: null,
                 availability: [],
                 availableUntil: null,
@@ -186,7 +184,7 @@ export default function createItemPage({ myCommunities }) {
                 isMulti={false}
                 isSearchable={true}
                 onChange={(value) => setCommunity(value)}
-                initialOption={community}
+                initialOption={community ? [community] : []}
             />
             <br />
             <h3>{t('item.category.category')}</h3>
@@ -234,3 +232,5 @@ export default function createItemPage({ myCommunities }) {
         </div>
     )
 }
+
+createItemPage.auth = true

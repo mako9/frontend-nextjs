@@ -20,11 +20,12 @@ export default function foreignCommunity(
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
-    const categories = itemData.categories.map((category) =>
-        itemCategories(t).find((e) => e.id === category)
-    )
+    const categories = itemData.categories
+        .map((category) => itemCategories(t).find((e) => e.id === category))
+        .filter((c): c is { id: string; label: string } => c !== undefined)
 
     useEffect(() => {
+        const createdUrls: string[] = []
         async function loadImages() {
             let itemImages: String[] = []
             for (const itemImageUuid of itemImageData) {
@@ -32,12 +33,18 @@ export default function foreignCommunity(
                     itemImageUuid,
                     session
                 )
-                if (itemImageBlob)
-                    itemImages.push(URL.createObjectURL(itemImageBlob))
+                if (itemImageBlob) {
+                    const url = URL.createObjectURL(itemImageBlob)
+                    createdUrls.push(url)
+                    itemImages.push(url)
+                }
             }
             setImages(itemImages)
         }
         loadImages()
+        return () => {
+            createdUrls.forEach((url) => URL.revokeObjectURL(url))
+        }
     }, [])
 
     return (

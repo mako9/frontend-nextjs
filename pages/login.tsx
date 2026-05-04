@@ -5,8 +5,8 @@ import { useSession, signIn } from 'next-auth/react'
 import { useEffect } from 'react'
 import Router from 'next/router'
 import styles from '../app/styles/layout.module.css'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next/pages'
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import Button from '../app/components/button'
 
 export default function Login() {

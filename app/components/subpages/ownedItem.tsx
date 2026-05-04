@@ -17,7 +17,7 @@ import { clientSideRequest } from '../../utils/request'
 import { useStateValue } from '../../components/context'
 import { useRouter } from 'next/router'
 import ImageGallery from '../imageGallery'
-import FileUpload from '../fileUpload'
+import FileUpload from '../FileUpload'
 import { Item, itemCategories } from '../../models/item'
 
 export default function ownedItem(
@@ -44,14 +44,15 @@ export default function ownedItem(
             ? { id: initialCommunity.uuid, label: initialCommunity.name }
             : null
     )
-    const initialCategories = itemData.categories.map((category) =>
-        itemCategories(t).find((e) => e.id === category)
-    )
+    const initialCategories = itemData.categories
+        .map((category) => itemCategories(t).find((e) => e.id === category))
+        .filter((c): c is { id: string; label: string } => c !== undefined)
     const [categories, setCategories] = useState(initialCategories)
     const [images, setImages] = useState<String[]>([])
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
     useEffect(() => {
+        const createdUrls: string[] = []
         async function loadImages() {
             let itemImages: String[] = []
             for (const itemImageUuid of itemImageData) {
@@ -59,12 +60,18 @@ export default function ownedItem(
                     itemImageUuid,
                     session
                 )
-                if (itemImageBlob)
-                    itemImages.push(URL.createObjectURL(itemImageBlob))
+                if (itemImageBlob) {
+                    const url = URL.createObjectURL(itemImageBlob)
+                    createdUrls.push(url)
+                    itemImages.push(url)
+                }
             }
             setImages(itemImages)
         }
         loadImages()
+        return () => {
+            createdUrls.forEach((url) => URL.revokeObjectURL(url))
+        }
     }, [])
 
     const editItemWithLoading = clientSideRequest(editItem, state, setState)
@@ -95,10 +102,10 @@ export default function ownedItem(
             itemImageData[currentImageIndex],
             session
         )
-        const newIndex = currentImageIndex - 1
-        setCurrentImageIndex(newIndex)
-        images.splice(currentImageIndex, 1)
-        setImages(images)
+        const urlToRevoke = images[currentImageIndex] as string
+        setImages(images.filter((_, i) => i !== currentImageIndex))
+        setCurrentImageIndex(Math.max(0, currentImageIndex - 1))
+        URL.revokeObjectURL(urlToRevoke)
     }
 
     return (
@@ -200,7 +207,7 @@ export default function ownedItem(
             <br />
             <h3>{t('item.category.category')}</h3>
             <Dropdown
-                options={itemCategories}
+                options={itemCategories(t)}
                 placeHolder={t('pleaseSelect')}
                 isMulti={true}
                 isSearchable={true}
@@ -229,7 +236,7 @@ export default function ownedItem(
                                 userUuid: itemData.userUuid,
                                 availability: itemData.availability,
                                 availableUntil: itemData.availableUntil,
-                                description: itemData.desciption,
+                                description: itemData.description,
                                 communityName: '',
                             },
                             session

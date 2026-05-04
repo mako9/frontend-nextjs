@@ -1,10 +1,10 @@
 import { getItem, getItemImageUuids } from '../../app/lib/items'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import { getServerSideSession } from '../../app/utils/session'
 import ownedItem from '../../app/components/subpages/ownedItem'
 import foreignItem from '../../app/components/subpages/foreignItem'
 import { useSession } from 'next-auth/react'
-import { useTranslation } from 'next-i18next'
+import { useTranslation } from 'next-i18next/pages'
 import { getMyCommunities } from '../../app/lib/communities'
 
 export async function getServerSideProps(context) {
