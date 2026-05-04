@@ -3,8 +3,8 @@ import {
     getMemberOfCommunity,
     getReguestingMemberOfCommunity,
 } from '../../app/lib/communities'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
+import { useTranslation } from 'next-i18next/pages'
 import { getServerSideSession } from '../../app/utils/session'
 import { useSession } from 'next-auth/react'
 import ownedCommunity from '../../app/components/subpages/ownedCommunity'

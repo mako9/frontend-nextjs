@@ -1,10 +1,10 @@
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import React, { useState } from 'react'
 import Table from '../app/components/table'
 import { getOwnedCommunities } from '../app/lib/communities'
 import { getOwnedItems } from '../app/lib/items'
 import ToggleButton from '../app/components/toggleButton'
-import { useTranslation } from 'next-i18next'
+import { useTranslation } from 'next-i18next/pages'
 import { getServerSideSession } from '../app/utils/session'
 import Button from '../app/components/button'
 import Router from 'next/router'
@@ -90,3 +90,5 @@ const MyArea = ({ ownedCommunitiesData, ownedItemsData }) => {
     )
 }
 export default MyArea
+
+MyArea.auth = true

@@ -2,6 +2,13 @@ import NextAuth, { DefaultSession } from 'next-auth'
 import KeycloakProvider from 'next-auth/providers/keycloak'
 import logger from '../../../app/utils/logger'
 
+if (process.env.NODE_ENV !== 'test') {
+    if (!process.env.KEYCLOAK_CLIENT_ID) throw new Error('KEYCLOAK_CLIENT_ID is not set')
+    if (!process.env.KEYCLOAK_CLIENT_SECRET) throw new Error('KEYCLOAK_CLIENT_SECRET is not set')
+    if (!process.env.KEYCLOAK_ISSUER) throw new Error('KEYCLOAK_ISSUER is not set')
+    if (!process.env.NEXTAUTH_SECRET) throw new Error('NEXTAUTH_SECRET is not set')
+}
+
 declare module 'next-auth' {
     interface Session extends DefaultSession {
         status: string
@@ -79,7 +86,7 @@ export const authOptions = {
             }
 
             // Return previous token if the access token has not expired yet
-            if (Date.now() < token.exp) {
+            if (Date.now() < token.accessTokenExpires) {
                 return token
             }
 

@@ -219,12 +219,12 @@ export default function ownedCommunity(
             <Button
                 title={t('community.approveRequests')}
                 onClick={onHandleApproveMemberRequests}
-                isDisabled={requestingMember.size > 0}
+                isDisabled={requestingMember.content.length === 0}
             />
             <Button
                 title={t('community.declineRequests')}
                 onClick={onHandleDeclineMemberRequests}
-                isDisabled={requestingMember.size > 0}
+                isDisabled={requestingMember.content.length === 0}
             />
         </div>
     )

@@ -9,8 +9,8 @@ import keyStyles from '../../app/styles/keyValue.module.css'
 import { useStateValue } from '../../app/components/context'
 import { useRouter } from 'next/router'
 import { clientSideRequest } from '../../app/utils/request'
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next/pages'
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import { useSession } from 'next-auth/react'
 
 export async function getServerSideProps(context) {
@@ -142,3 +142,5 @@ export default function createCommunityPage() {
         </div>
     )
 }
+
+createCommunityPage.auth = true
