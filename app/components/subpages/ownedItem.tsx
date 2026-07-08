@@ -36,6 +36,7 @@ export default function ownedItem(
     const [postalCode, setPostalCode] = useState(itemData.postalCode)
     const [city, setCity] = useState(itemData.city)
     const [isActive, setIsActive] = useState(itemData.active)
+    const [requiresApproval, setRequiresApproval] = useState(itemData.requiresApproval ?? false)
     const initialCommunity = myCommunities.find(
         (e) => e.uuid === itemData.communityUuid
     )
@@ -192,6 +193,16 @@ export default function ownedItem(
                 />
             </div>
             <br />
+            <div className="horizontal_container">
+                <text className={keyStyles.key}>{t('item.requiresApproval')}</text>
+                <input
+                    className={inputStyles.input_right}
+                    type="checkbox"
+                    onChange={() => setRequiresApproval(!requiresApproval)}
+                    checked={requiresApproval}
+                />
+            </div>
+            <br />
             <h3>{t('item.relatedCommunity')}</h3>
             <Dropdown
                 options={myCommunities.map((e) => ({
@@ -229,6 +240,7 @@ export default function ownedItem(
                                 uuid: itemData.uuid,
                                 name: name,
                                 active: isActive,
+                                requiresApproval,
                                 categories: categories.map(
                                     (category) => category.id
                                 ),

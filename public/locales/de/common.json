@@ -69,6 +69,41 @@
         "deleteImage": "Bild löschen",
         "requestItem": "Item anfragen",
         "desiredBookingStartDate": "Gewünschtes Startdatum",
-        "desiredBookingEndDate": "Gewünschtes Enddatum"
+        "desiredBookingEndDate": "Gewünschtes Enddatum",
+        "approvalRequired": "Genehmigung durch Eigentümer erforderlich",
+        "requiresApproval": "Genehmigung erforderlich",
+        "bookingRequested": "Buchungsanfrage erfolgreich gesendet."
+    },
+    "bookings": {
+        "title": "Meine Buchungen",
+        "noBookings": "Keine Buchungen gefunden.",
+        "detail": "Buchungsdetails",
+        "notFound": "Buchung nicht gefunden."
+    },
+    "booking": {
+        "from": "Von",
+        "to": "Bis",
+        "approve": "Genehmigen",
+        "decline": "Ablehnen",
+        "cancel": "Buchung stornieren",
+        "status": {
+            "label": "Status",
+            "pending": "Ausstehend",
+            "confirmed": "Bestätigt",
+            "declined": "Abgelehnt",
+            "cancelled": "Storniert"
+        }
+    },
+    "notifications": {
+        "title": "Benachrichtigungen",
+        "empty": "Keine Benachrichtigungen."
+    },
+    "notification": {
+        "type": {
+            "BOOKING_REQUEST": "Neue Buchungsanfrage",
+            "BOOKING_CONFIRMED": "Buchung bestätigt",
+            "BOOKING_DECLINED": "Buchung abgelehnt",
+            "BOOKING_CANCELLED": "Buchung storniert"
+        }
     }
 }

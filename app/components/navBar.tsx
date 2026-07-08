@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react'
 import styles from '../styles/nav.module.css'
 import { useTranslation } from 'next-i18next/pages'
 import { useStateValue } from './context'
+import { getUnreadCount } from '../lib/notifications'
 
 const NavBar = () => {
     const { t } = useTranslation('common')
@@ -15,6 +16,7 @@ const NavBar = () => {
         data !== null && data?.status === 'authenticated'
     )
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [unreadCount, setUnreadCount] = useState(0)
 
     const handleMouseEnter = () => {
         setIsMenuOpen(true)
@@ -35,6 +37,14 @@ const NavBar = () => {
     useEffect(() => {
         setIsLoggedIn(data !== null && data?.status === 'authenticated')
     }, [data])
+
+    useEffect(() => {
+        if (!isLoggedIn || !data) return
+        const fetchCount = () => getUnreadCount(data).then(setUnreadCount)
+        fetchCount()
+        const interval = setInterval(fetchCount, 30000)
+        return () => clearInterval(interval)
+    }, [isLoggedIn, data])
 
     return (
         <header className={styles.nav_header}>
@@ -89,39 +99,52 @@ const NavBar = () => {
                         />
                     </div>
                     {isLoggedIn ? (
-                        <div
-                            className={`${styles.dropdown_button} ${
-                                navActive ? styles.nav_element_hide : ''
-                            }`}
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                        >
-                            <img
-                                className={styles.nav_icon}
-                                src="/icons/user_profile.svg"
-                            />
-                            {isMenuOpen && (
-                                <div className={styles.dropdown_container}>
-                                    <div className={styles.dropdown_menu}>
-                                        <li>
-                                            <Link href="/settings">
-                                                Settings
-                                            </Link>
-                                        </li>
-                                        <li
-                                            onClick={() => {
-                                                signOut({
-                                                    callbackUrl: '/login',
-                                                })
-                                            }}
-                                            key="Sign out"
-                                        >
-                                            {t('navBar.signout')}
-                                        </li>
+                        <>
+                            <Link href="/notifications" style={{ position: 'relative', marginRight: '8px', display: 'inline-flex', alignItems: 'center' }}>
+                                <span style={{ fontSize: '20px' }}>🔔</span>
+                                {unreadCount > 0 && (
+                                    <span style={{
+                                        position: 'absolute', top: '-4px', right: '-4px',
+                                        background: 'red', color: 'white', borderRadius: '50%',
+                                        width: '16px', height: '16px', fontSize: '10px',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                    }}>{unreadCount}</span>
+                                )}
+                            </Link>
+                            <div
+                                className={`${styles.dropdown_button} ${
+                                    navActive ? styles.nav_element_hide : ''
+                                }`}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
+                            >
+                                <img
+                                    className={styles.nav_icon}
+                                    src="/icons/user_profile.svg"
+                                />
+                                {isMenuOpen && (
+                                    <div className={styles.dropdown_container}>
+                                        <div className={styles.dropdown_menu}>
+                                            <li>
+                                                <Link href="/settings">
+                                                    Settings
+                                                </Link>
+                                            </li>
+                                            <li
+                                                onClick={() => {
+                                                    signOut({
+                                                        callbackUrl: '/login',
+                                                    })
+                                                }}
+                                                key="Sign out"
+                                            >
+                                                {t('navBar.signout')}
+                                            </li>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                        </div>
+                                )}
+                            </div>
+                        </>
                     ) : null}
                 </div>
             </nav>

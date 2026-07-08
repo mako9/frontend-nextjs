@@ -20,6 +20,7 @@ export default function foreignCommunity(
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
+    const [booked, setBooked] = useState(false)
     const categories = itemData.categories
         .map((category) => itemCategories(t).find((e) => e.id === category))
         .filter((c): c is { id: string; label: string } => c !== undefined)
@@ -97,14 +98,22 @@ export default function foreignCommunity(
                 }
             />
             <br />
-            <Button
-                title={t('item.requestItem')}
-                onClick={() =>
-                    bookItem(itemData.uuid, startDate, endDate, session)
-                }
-                isDisabled={false}
-                type="button"
-            />
+            {itemData.requiresApproval && (
+                <p style={{ color: 'orange' }}>{t('item.approvalRequired')}</p>
+            )}
+            {booked ? (
+                <p style={{ color: 'green' }}>{t('item.bookingRequested')}</p>
+            ) : (
+                <Button
+                    title={t('item.requestItem')}
+                    onClick={async () => {
+                        await bookItem(itemData.uuid, startDate, endDate, session)
+                        setBooked(true)
+                    }}
+                    isDisabled={false}
+                    type="button"
+                />
+            )}
         </div>
     )
 }
