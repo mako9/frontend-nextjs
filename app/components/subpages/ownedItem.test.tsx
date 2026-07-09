@@ -76,4 +76,18 @@ describe('ownedItem', () => {
         expect(screen.getByDisplayValue('Power Drill')).toBeInTheDocument()
         expect(screen.getByDisplayValue('Munich')).toBeInTheDocument()
     })
+
+    test('renders requiresApproval checkbox', () => {
+        render(
+            <StateProvider>
+                <Wrapper />
+            </StateProvider>
+        )
+        // The component renders two checkboxes: isActive (checked=true) and requiresApproval (checked=false)
+        const checkboxes = screen.getAllByRole('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(2)
+        const requiresApprovalCheckbox = checkboxes[1]
+        expect(requiresApprovalCheckbox).toBeInTheDocument()
+        expect(requiresApprovalCheckbox).not.toBeChecked()
+    })
 })
