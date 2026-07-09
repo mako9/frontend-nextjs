@@ -14,6 +14,7 @@ export type Item = {
     description: string
     communityName: string
     firstImageUuid: string
+    requiresApproval?: boolean
 }
 
 export type ItemImage = {

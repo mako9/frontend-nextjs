@@ -69,6 +69,41 @@
         "deleteImage": "Delete image",
         "requestItem": "Request item",
         "desiredBookingStartDate": "Desired start date",
-        "desiredBookingEndDate": "Desired end date"
+        "desiredBookingEndDate": "Desired end date",
+        "approvalRequired": "Approval required by owner",
+        "requiresApproval": "Requires approval",
+        "bookingRequested": "Booking request sent successfully."
+    },
+    "bookings": {
+        "title": "My Bookings",
+        "noBookings": "No bookings found.",
+        "detail": "Booking Details",
+        "notFound": "Booking not found."
+    },
+    "booking": {
+        "from": "From",
+        "to": "To",
+        "approve": "Approve",
+        "decline": "Decline",
+        "cancel": "Cancel booking",
+        "status": {
+            "label": "Status",
+            "pending": "Awaiting approval",
+            "confirmed": "Confirmed",
+            "declined": "Declined",
+            "cancelled": "Cancelled"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "empty": "No notifications."
+    },
+    "notification": {
+        "type": {
+            "BOOKING_REQUEST": "New booking request",
+            "BOOKING_CONFIRMED": "Booking confirmed",
+            "BOOKING_DECLINED": "Booking declined",
+            "BOOKING_CANCELLED": "Booking cancelled"
+        }
     }
 }

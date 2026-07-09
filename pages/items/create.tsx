@@ -52,6 +52,7 @@ export default function createItemPage({ myCommunities }) {
     const [postalCode, setPostalCode] = useState(null)
     const [city, setCity] = useState(null)
     const [isActive, setIsActive] = useState(true)
+    const [requiresApproval, setRequiresApproval] = useState(false)
     const [categories, setCategories] = useState<DropdownOption[]>([])
     const [community, setCommunity] = useState<DropdownOption | null>(
         myCommunities.content.length > 0
@@ -97,6 +98,7 @@ export default function createItemPage({ myCommunities }) {
                 uuid: null,
                 name: name,
                 active: isActive,
+                requiresApproval,
                 categories: categories.map((category) => category.id),
                 communityUuid: community?.id ?? null,
                 userUuid: null,
@@ -170,6 +172,16 @@ export default function createItemPage({ myCommunities }) {
                     type="checkbox"
                     onChange={(e) => setIsActive(!isActive)}
                     checked={isActive}
+                />
+            </div>
+            <br />
+            <div className="horizontal_container">
+                <text className={keyStyles.key}>{t('item.requiresApproval')}</text>
+                <input
+                    className={inputStyles.input_right}
+                    type="checkbox"
+                    onChange={() => setRequiresApproval(!requiresApproval)}
+                    checked={requiresApproval}
                 />
             </div>
             <br />
