@@ -71,6 +71,7 @@
         "desiredBookingStartDate": "Desired start date",
         "desiredBookingEndDate": "Desired end date",
         "approvalRequired": "Approval required by owner",
+        "alreadyBooked": "Some dates are already booked and are not selectable.",
         "requiresApproval": "Requires approval",
         "bookingRequested": "Booking request sent successfully."
     },

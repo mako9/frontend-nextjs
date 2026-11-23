@@ -10,6 +10,9 @@ jest.mock('app/lib/items', () => ({
 jest.mock('app/lib/communities', () => ({
     getMyCommunities: jest.fn(),
 }))
+jest.mock('app/lib/bookings', () => ({
+    getBookingDates: jest.fn(),
+}))
 jest.mock('app/utils/session', () => ({
     getServerSideSession: jest.fn().mockResolvedValue({ accessToken: 'token' }),
 }))
@@ -22,6 +25,8 @@ jest.mock('app/components/subpages/foreignItem', () =>
 
 const { getItem, getItemImageUuids } = require('app/lib/items')
 const { getMyCommunities } = require('app/lib/communities')
+const { getBookingDates } = require('app/lib/bookings')
+const foreignItemMock = require('app/components/subpages/foreignItem')
 
 const mockItem = {
     uuid: 'item-1', name: 'Drill', categories: ['TOOL'],
@@ -92,5 +97,58 @@ describe('Item page — component', () => {
             </StateProvider>
         )
         expect(container.firstChild).toBeNull()
+    })
+})
+
+describe('Item page — already-booked dates', () => {
+    const booked = [{ startAt: '2026-06-04T09:00:00.000Z', endAt: '2026-06-06T17:00:00.000Z' }]
+
+    beforeEach(() => {
+        // this file has no automatic mock reset, so a bare not.toHaveBeenCalled() here would be a
+        // statement about the previous test rather than about this one
+        getBookingDates.mockClear()
+        getBookingDates.mockResolvedValue(booked)
+    })
+
+    test('getServerSideProps supplies the booked dates for a foreign item', async () => {
+        const context = { req: {}, res: {}, params: { id: 'item-1' }, query: {}, locale: 'en' }
+
+        const result = await getServerSideProps(context as any)
+
+        const props = (result as { props: Record<string, any> }).props
+        expect(props.bookedDates).toEqual(booked)
+        expect(getBookingDates).toHaveBeenCalledWith('item-1', expect.anything())
+    })
+
+    test('getServerSideProps supplies no booked dates for an item of my own', async () => {
+        const context = { req: {}, res: {}, params: { id: 'item-1' }, query: { isOwned: 'true' }, locale: 'en' }
+
+        const result = await getServerSideProps(context as any)
+
+        const props = (result as { props: Record<string, any> }).props
+        expect(props.bookedDates).toEqual([])
+        expect(getBookingDates).not.toHaveBeenCalled()
+    })
+
+    test('the foreign item view is given the booked dates as its fourth argument', () => {
+        foreignItemMock.mockClear()
+        render(
+            <StateProvider>
+                <Item
+                    itemData={mockItem}
+                    itemImageData={[]}
+                    myCommunities={mockCommunitiesPage}
+                    bookedDates={booked}
+                    isOwned="false"
+                />
+            </StateProvider>
+        )
+        expect(foreignItemMock).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            booked,
+            expect.any(Function)
+        )
     })
 })

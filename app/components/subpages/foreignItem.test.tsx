@@ -9,14 +9,22 @@ jest.mock('../../lib/items', () => ({
 
 jest.mock('../datePicker', () => ({
     __esModule: true,
-    default: ({ selectedDate }: { selectedDate: Date }) => (
-        <div data-testid="date-picker">{selectedDate.toISOString()}</div>
+    default: ({ selectedDate, excludeDateIntervals }: any) => (
+        <div data-testid="date-picker">
+            {selectedDate.toISOString()}|{(excludeDateIntervals ?? []).length}
+        </div>
     ),
 }))
 
 const t = (key: string) => key
-const mockSession = { accessToken: 'token' }
-const mockItemData = {
+const bookedDates = [
+    { startAt: '2026-06-04T09:00:00.000Z', endAt: '2026-06-06T17:00:00.000Z' },
+    { startAt: '2026-06-20T09:00:00.000Z', endAt: '2026-06-21T17:00:00.000Z' },
+]
+// not a full Session, and the lib functions only pass it through; the cast is what the
+// type checker needs (Phase 1 reduces the remaining fixtures the same way)
+const mockSession = { accessToken: 'token' } as any
+const mockItemData: any = {
     uuid: 'item-1',
     name: 'Lawn Mower',
     categories: ['GARDENING'],
@@ -35,7 +43,7 @@ const mockItemData = {
     requiresApproval: false,
 }
 
-const Wrapper = () => foreignItem(mockSession, mockItemData, [], t)
+const Wrapper = () => foreignItem(mockSession, mockItemData, [], [], t)
 
 describe('foreignItem', () => {
     test('renders item name', () => {
@@ -68,7 +76,7 @@ describe('foreignItem', () => {
 
     test('renders approval required notice when requiresApproval is true', () => {
         const itemWithApproval = { ...mockItemData, requiresApproval: true }
-        const WrapperWithApproval = () => foreignItem(mockSession, itemWithApproval, [], t)
+        const WrapperWithApproval = () => foreignItem(mockSession, itemWithApproval, [], [], t)
         render(<WrapperWithApproval />)
         expect(screen.getByText('item.approvalRequired')).toBeInTheDocument()
     })
@@ -76,5 +84,29 @@ describe('foreignItem', () => {
     test('does not render approval required notice when requiresApproval is false', () => {
         render(<Wrapper />)
         expect(screen.queryByText('item.approvalRequired')).not.toBeInTheDocument()
+    })
+
+    describe('already-booked dates', () => {
+        const WrapperBooked = () => foreignItem(mockSession, mockItemData, [], bookedDates, t)
+
+        test('hands the booked ranges to both date pickers', () => {
+            render(<WrapperBooked />)
+            const pickers = screen.getAllByTestId('date-picker')
+            expect(pickers).toHaveLength(2)
+            pickers.forEach((picker) => expect(picker.textContent).toMatch(/\|2$/))
+        })
+
+        test('says that some dates are taken, when some are', () => {
+            render(<WrapperBooked />)
+            expect(screen.getByText('item.alreadyBooked')).toBeInTheDocument()
+        })
+
+        test('says nothing about booked dates, and excludes nothing, for an unbooked item', () => {
+            render(<Wrapper />)
+            expect(screen.queryByText('item.alreadyBooked')).not.toBeInTheDocument()
+            screen.getAllByTestId('date-picker').forEach((picker) =>
+                expect(picker.textContent).toMatch(/\|0$/)
+            )
+        })
     })
 })

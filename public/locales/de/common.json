@@ -71,6 +71,7 @@
         "desiredBookingStartDate": "Gewünschtes Startdatum",
         "desiredBookingEndDate": "Gewünschtes Enddatum",
         "approvalRequired": "Genehmigung durch Eigentümer erforderlich",
+        "alreadyBooked": "Einige Termine sind bereits gebucht und können nicht gewählt werden.",
         "requiresApproval": "Genehmigung erforderlich",
         "bookingRequested": "Buchungsanfrage erfolgreich gesendet."
     },

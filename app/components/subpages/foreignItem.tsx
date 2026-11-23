@@ -9,11 +9,13 @@ import { useEffect, useState } from 'react'
 import ImageGallery from '../imageGallery'
 import { Session } from 'next-auth'
 import CustomDatePicker from '../datePicker'
+import { BookingDateRange } from '../../models/booking'
 
 export default function foreignCommunity(
     session: Session | null,
     itemData: Item,
-    itemImageData: [String],
+    itemImageData: String[],
+    bookedDates: BookingDateRange[],
     t
 ) {
     const [images, setImages] = useState<String[]>([])
@@ -21,6 +23,10 @@ export default function foreignCommunity(
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [booked, setBooked] = useState(false)
+    const excludeDateIntervals = bookedDates.map((range) => ({
+        start: new Date(range.startAt),
+        end: new Date(range.endAt),
+    }))
     const categories = itemData.categories
         .map((category) => itemCategories(t).find((e) => e.id === category))
         .filter((c): c is { id: string; label: string } => c !== undefined)
@@ -78,12 +84,16 @@ export default function foreignCommunity(
                 value={itemData.description}
             />
             <br />
+            {excludeDateIntervals.length > 0 && (
+                <p style={{ color: 'orange' }}>{t('item.alreadyBooked')}</p>
+            )}
             <KeyValue
                 name={t('item.desiredBookingStartDate')}
                 value={
                     <CustomDatePicker
                         selectedDate={startDate}
                         setSelectedDate={setStartDate}
+                        excludeDateIntervals={excludeDateIntervals}
                     />
                 }
             />
@@ -94,6 +104,7 @@ export default function foreignCommunity(
                     <CustomDatePicker
                         selectedDate={endDate}
                         setSelectedDate={setEndDate}
+                        excludeDateIntervals={excludeDateIntervals}
                     />
                 }
             />
