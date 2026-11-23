@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next'
 import { getSession, useSession } from 'next-auth/react'
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import { useTranslation } from 'next-i18next/pages'
+import { formatDateTime } from '../app/utils/dates'
 import Head from 'next/head'
 import { useEffect } from 'react'
 import { AppNotification } from '../app/models/notification'
@@ -9,7 +10,7 @@ import { getNotifications, markAllRead } from '../app/lib/notifications'
 import styles from '../app/styles/utils.module.css'
 
 export default function NotificationsPage({ notifications }: { notifications: AppNotification[] }) {
-    const { t } = useTranslation('common')
+    const { t, i18n } = useTranslation('common')
     const { data: session } = useSession()
 
     useEffect(() => {
@@ -26,7 +27,7 @@ export default function NotificationsPage({ notifications }: { notifications: Ap
                 <ul>
                     {notifications.map(n => (
                         <li key={n.uuid} style={{ marginBottom: '8px', opacity: n.read ? 0.6 : 1 }}>
-                            {t(`notification.type.${n.type}`)} — {new Date(n.createdAt).toLocaleString()}
+                            {t(`notification.type.${n.type}`)} — {formatDateTime(n.createdAt, i18n?.language)}
                         </li>
                     ))}
                 </ul>

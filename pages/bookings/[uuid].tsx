@@ -7,10 +7,11 @@ import { useRouter } from 'next/router'
 import { ItemBooking } from '../../app/models/booking'
 import { getBooking, approveBooking, declineBooking, cancelBooking, returnBooking } from '../../app/lib/bookings'
 import Button from '../../app/components/button'
+import { formatDate } from '../../app/utils/dates'
 import styles from '../../app/styles/utils.module.css'
 
 export default function BookingDetailPage({ booking }: { booking: ItemBooking | null }) {
-    const { t } = useTranslation('common')
+    const { t, i18n } = useTranslation('common')
     const { data: session } = useSession()
     const router = useRouter()
 
@@ -26,8 +27,8 @@ export default function BookingDetailPage({ booking }: { booking: ItemBooking | 
             <Head><title>{t('bookings.detail')}</title></Head>
             <h1 className={styles.headingXl}>{t('bookings.detail')}</h1>
             <p><strong>{t('booking.status.label')}:</strong> {t(`booking.status.${booking.status.toLowerCase()}`)}</p>
-            <p><strong>{t('booking.from')}:</strong> {new Date(booking.startAt).toLocaleDateString()}</p>
-            <p><strong>{t('booking.to')}:</strong> {new Date(booking.endAt).toLocaleDateString()}</p>
+            <p><strong>{t('booking.from')}:</strong> {formatDate(booking.startAt, i18n?.language)}</p>
+            <p><strong>{t('booking.to')}:</strong> {formatDate(booking.endAt, i18n?.language)}</p>
             <br />
             {booking.status === 'PENDING' && isOwner && (
                 <>

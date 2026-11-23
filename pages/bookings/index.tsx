@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { getMyBookings, getReceivedBookings } from '../../app/lib/bookings'
 import { ItemBooking, BookingStatus } from '../../app/models/booking'
 import ToggleButton from '../../app/components/toggleButton'
+import { formatDate } from '../../app/utils/dates'
 import styles from '../../app/styles/utils.module.css'
 
 function statusColor(status: BookingStatus): string {
@@ -26,7 +27,7 @@ function statusColor(status: BookingStatus): string {
 }
 
 function BookingList({ bookings }: { bookings: ItemBooking[] }) {
-    const { t } = useTranslation('common')
+    const { t, i18n } = useTranslation('common')
     if (bookings.length === 0) return <p>{t('bookings.noBookings')}</p>
     return (
         <ul>
@@ -36,7 +37,8 @@ function BookingList({ bookings }: { bookings: ItemBooking[] }) {
                         <span style={{ color: statusColor(b.status), fontWeight: 'bold', marginRight: '8px' }}>
                             [{t(`booking.status.${b.status.toLowerCase()}`)}]
                         </span>
-                        {new Date(b.startAt).toLocaleDateString()} – {new Date(b.endAt).toLocaleDateString()}
+                        {formatDate(b.startAt, i18n?.language)} –{' '}
+                        {formatDate(b.endAt, i18n?.language)}
                     </Link>
                 </li>
             ))}
