@@ -53,6 +53,28 @@ describe('Create Item page — component', () => {
         expect(screen.getByRole('button', { name: 'save' })).toBeInTheDocument()
     })
 
+    // a neighbour who has never heard of ComShare should not have to discover the approval switch to
+    // find out that lending here is a yes/no decision the owner makes
+    test('a new item asks for approval by default', () => {
+        render(
+            <StateProvider>
+                <Page myCommunities={mockCommunitiesPage} />
+            </StateProvider>
+        )
+        expect(
+            screen.getByRole('checkbox', { name: 'item.requiresApproval' })
+        ).toBeChecked()
+    })
+
+    test('a new item is listed as active, and that is a separate decision from approval', () => {
+        render(
+            <StateProvider>
+                <Page myCommunities={mockCommunitiesPage} />
+            </StateProvider>
+        )
+        expect(screen.getByRole('checkbox', { name: 'item.isActive' })).toBeChecked()
+    })
+
     test('has auth marker', () => {
         expect((createItemPage as any).auth).toBe(true)
     })
