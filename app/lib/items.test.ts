@@ -33,7 +33,7 @@ const mockItem = {
     city: 'Test City',
     communityUuid: 'com-1',
     userUuid: 'user-1',
-    active: true,
+    isActive: true,
     availability: [],
     availableUntil: null,
     description: 'A description',

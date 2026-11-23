@@ -31,7 +31,7 @@ const foreignItemMock = require('app/components/subpages/foreignItem')
 const mockItem = {
     uuid: 'item-1', name: 'Drill', categories: ['TOOL'],
     street: 'Main St', houseNumber: '1', postalCode: '12345', city: 'Munich',
-    communityUuid: 'com-1', userUuid: 'user-1', active: true,
+    communityUuid: 'com-1', userUuid: 'user-1', isActive: true,
     availability: [], availableUntil: null, description: 'desc',
     communityName: 'Test Community', firstImageUuid: null,
 }

@@ -99,7 +99,7 @@ export default function createItemPage({ myCommunities }) {
                 city,
                 uuid: null,
                 name: name,
-                active: isActive,
+                isActive: isActive,
                 requiresApproval,
                 categories: categories.map((category) => category.id),
                 communityUuid: community?.id ?? null,

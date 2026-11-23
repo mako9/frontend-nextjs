@@ -8,7 +8,7 @@ export type Item = {
     city: string
     communityUuid: string
     userUuid: string
-    active: boolean
+    isActive: boolean
     availability: Array<ItemTimeInterval>
     availableUntil: string | null
     description: string

@@ -36,7 +36,7 @@ const mockItemData: any = {
     city: 'Munich',
     communityUuid: 'com-1',
     userUuid: 'user-2',
-    active: true,
+    isActive: true,
     availability: [],
     availableUntil: null,
     description: 'Great for the garden',

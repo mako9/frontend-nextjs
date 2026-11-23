@@ -35,7 +35,7 @@ export default function ownedItem(
     const [houseNumber, setHouseNumber] = useState(itemData.houseNumber)
     const [postalCode, setPostalCode] = useState(itemData.postalCode)
     const [city, setCity] = useState(itemData.city)
-    const [isActive, setIsActive] = useState(itemData.active)
+    const [isActive, setIsActive] = useState(itemData.isActive)
     const [requiresApproval, setRequiresApproval] = useState(itemData.requiresApproval ?? false)
     const initialCommunity = myCommunities.find(
         (e) => e.uuid === itemData.communityUuid
@@ -239,7 +239,7 @@ export default function ownedItem(
                                 city,
                                 uuid: itemData.uuid,
                                 name: name,
-                                active: isActive,
+                                isActive: isActive,
                                 requiresApproval,
                                 categories: categories.map(
                                     (category) => category.id
