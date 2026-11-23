@@ -20,7 +20,10 @@ export default function BookingDetailPage({ booking }: { booking: ItemBooking | 
     // the server tells us which side of the booking the caller is on; without this the owner's
     // approve/decline controls were dead code
     const isOwner = booking.isItemOwner
-    const canCancel = (booking.status === 'PENDING' || booking.status === 'CONFIRMED') && new Date(booking.startAt) > new Date()
+    const started = new Date(booking.startAt) <= new Date()
+    const canCancel = (booking.status === 'PENDING' || booking.status === 'CONFIRMED') && !started
+    // the server refuses a return for a rental that has not begun, so the button would only ever fail
+    const canReturn = booking.status === 'CONFIRMED' && started
 
     return (
         <>
@@ -42,7 +45,7 @@ export default function BookingDetailPage({ booking }: { booking: ItemBooking | 
                     }} isDisabled={false} type="button" />
                 </>
             )}
-            {booking.status === 'CONFIRMED' && (
+            {canReturn && (
                 <Button title={t('booking.return')} onClick={async () => {
                     await returnBooking(booking.uuid, session)
                     router.push('/bookings')

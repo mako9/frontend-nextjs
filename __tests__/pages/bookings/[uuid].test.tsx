@@ -101,9 +101,17 @@ describe('Booking detail page — who may act', () => {
         expect(screen.queryByRole('button', { name: 'booking.decline' })).not.toBeInTheDocument()
     })
 
-    test('a confirmed booking offers marking it returned', () => {
-        render(<Page booking={mockBooking} />)
+    // "returned" means the item is back with its owner. Before the rental has started there is nothing to
+    // hand back, and the server refuses it - the action for an unwanted future booking is cancel.
+    test('a confirmed booking whose rental is under way offers marking it returned', () => {
+        render(<Page booking={{ ...mockBooking, startAt: pastStart, endAt: futureEnd }} />)
         expect(screen.getByRole('button', { name: 'booking.return' })).toBeInTheDocument()
+    })
+
+    test('a confirmed booking that has not started offers cancelling, not returning', () => {
+        render(<Page booking={mockBooking} />)
+        expect(screen.queryByRole('button', { name: 'booking.return' })).not.toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'booking.cancel' })).toBeInTheDocument()
     })
 
     test('a returned booking offers no action at all', () => {
