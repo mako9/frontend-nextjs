@@ -71,12 +71,15 @@
         "desiredBookingStartDate": "Gewünschtes Startdatum",
         "desiredBookingEndDate": "Gewünschtes Enddatum",
         "approvalRequired": "Genehmigung durch Eigentümer erforderlich",
+        "alreadyBooked": "Einige Termine sind bereits gebucht und können nicht gewählt werden.",
         "requiresApproval": "Genehmigung erforderlich",
         "bookingRequested": "Buchungsanfrage erfolgreich gesendet."
     },
     "bookings": {
         "title": "Meine Buchungen",
         "noBookings": "Keine Buchungen gefunden.",
+        "myRequests": "Meine Anfragen",
+        "received": "Anfragen für meine Gegenstände",
         "detail": "Buchungsdetails",
         "notFound": "Buchung nicht gefunden."
     },
@@ -86,12 +89,14 @@
         "approve": "Genehmigen",
         "decline": "Ablehnen",
         "cancel": "Buchung stornieren",
+        "return": "Als zurückgegeben markieren",
         "status": {
             "label": "Status",
             "pending": "Ausstehend",
             "confirmed": "Bestätigt",
             "declined": "Abgelehnt",
-            "cancelled": "Storniert"
+            "cancelled": "Storniert",
+            "returned": "Zurückgegeben"
         }
     },
     "notifications": {
@@ -103,7 +108,9 @@
             "BOOKING_REQUEST": "Neue Buchungsanfrage",
             "BOOKING_CONFIRMED": "Buchung bestätigt",
             "BOOKING_DECLINED": "Buchung abgelehnt",
-            "BOOKING_CANCELLED": "Buchung storniert"
+            "BOOKING_CANCELLED": "Buchung storniert",
+            "BOOKING_RETURNED": "Gegenstand zurückgegeben",
+            "ITEM_BOOKED": "Dein Gegenstand wurde gebucht"
         }
     }
 }

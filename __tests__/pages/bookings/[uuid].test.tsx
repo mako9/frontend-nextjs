@@ -13,6 +13,7 @@ jest.mock('app/lib/bookings', () => ({
     approveBooking: jest.fn(),
     declineBooking: jest.fn(),
     cancelBooking: jest.fn(),
+    returnBooking: jest.fn(),
 }))
 
 const { getSession } = require('next-auth/react')
@@ -31,6 +32,7 @@ const mockBooking = {
     endAt: futureEnd,
     createdAt: new Date().toISOString(),
     status: 'CONFIRMED' as const,
+    isItemOwner: false,
 }
 
 const Page = BookingDetailPage as React.ComponentType<any>
@@ -44,7 +46,10 @@ describe('Booking detail page — getServerSideProps', () => {
         const result = await getServerSideProps(context as any)
         expect('props' in result).toBe(true)
         if ('props' in result) {
-            expect(result.props.booking).toEqual(mockBooking)
+            // Next's GetServerSidePropsResult allows props to be a promise, so the props object
+            // itself has to be awaited before a field can be read off it
+            const props = await result.props
+            expect(props.booking).toEqual(mockBooking)
         }
     })
 
@@ -80,5 +85,44 @@ describe('Booking detail page — component', () => {
         const pastBooking = { ...mockBooking, startAt: pastStart, endAt: pastEnd }
         render(<Page booking={pastBooking} />)
         expect(screen.queryByRole('button', { name: 'booking.cancel' })).not.toBeInTheDocument()
+    })
+})
+
+describe('Booking detail page — who may act', () => {
+    const pendingOwner = { ...mockBooking, status: 'PENDING' as const, isItemOwner: true }
+    const pendingRequester = { ...mockBooking, status: 'PENDING' as const, isItemOwner: false }
+
+    test('the owner of a pending booking sees approve and decline', () => {
+        render(<Page booking={pendingOwner} />)
+        expect(screen.getByRole('button', { name: 'booking.approve' })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'booking.decline' })).toBeInTheDocument()
+    })
+
+    test('the requester of a pending booking sees neither approve nor decline', () => {
+        render(<Page booking={pendingRequester} />)
+        expect(screen.queryByRole('button', { name: 'booking.approve' })).not.toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: 'booking.decline' })).not.toBeInTheDocument()
+    })
+
+    // "returned" means the item is back with its owner. Before the rental has started there is nothing to
+    // hand back, and the server refuses it - the action for an unwanted future booking is cancel.
+    test('a confirmed booking whose rental is under way offers marking it returned', () => {
+        render(<Page booking={{ ...mockBooking, startAt: pastStart, endAt: futureEnd }} />)
+        expect(screen.getByRole('button', { name: 'booking.return' })).toBeInTheDocument()
+    })
+
+    test('a confirmed booking that has not started offers cancelling, not returning', () => {
+        render(<Page booking={mockBooking} />)
+        expect(screen.queryByRole('button', { name: 'booking.return' })).not.toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'booking.cancel' })).toBeInTheDocument()
+    })
+
+    test('a returned booking offers no action at all', () => {
+        render(<Page booking={{ ...mockBooking, status: 'RETURNED' as const, isItemOwner: true }} />)
+        expect(screen.queryByRole('button', { name: 'booking.approve' })).not.toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: 'booking.decline' })).not.toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: 'booking.cancel' })).not.toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: 'booking.return' })).not.toBeInTheDocument()
+        expect(screen.getByText(/booking\.status\.returned/)).toBeInTheDocument()
     })
 })

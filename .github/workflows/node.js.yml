@@ -29,3 +29,17 @@ jobs:
       run: npm install -g pnpm@9.15.9
     - run: pnpm install
     - run: pnpm run test-ci
+    - run: pnpm run typecheck
+    # Green tests are not "it builds": until 2026-11-23 this job ran no build and no typecheck, which is how
+    # a CSS @import that broke `next build` (and `next dev`) went unnoticed since 2023. Note that `.env.local`
+    # does not exist on a runner and `.env.development` is not loaded by `next build`, and that collecting page
+    # data imports pages/api/auth/[...nextauth].ts, which throws without the four Keycloak/next-auth values -
+    # so the build needs them even though they are runtime values. They are placeholders: nothing here is a
+    # secret, and nothing built here is deployed.
+    - run: pnpm run build
+      env:
+        NEXTAUTH_SECRET: ci-only-placeholder-not-a-secret
+        KEYCLOAK_ISSUER: http://localhost:8180/realms/quarkus
+        KEYCLOAK_CLIENT_ID: backend-service
+        KEYCLOAK_CLIENT_SECRET: ci-only-placeholder-not-a-secret
+        BACKEND_BASE_URL: http://127.0.0.1:8080/api

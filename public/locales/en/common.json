@@ -71,12 +71,15 @@
         "desiredBookingStartDate": "Desired start date",
         "desiredBookingEndDate": "Desired end date",
         "approvalRequired": "Approval required by owner",
+        "alreadyBooked": "Some dates are already booked and are not selectable.",
         "requiresApproval": "Requires approval",
         "bookingRequested": "Booking request sent successfully."
     },
     "bookings": {
         "title": "My Bookings",
         "noBookings": "No bookings found.",
+        "myRequests": "My requests",
+        "received": "Requests for my items",
         "detail": "Booking Details",
         "notFound": "Booking not found."
     },
@@ -86,12 +89,14 @@
         "approve": "Approve",
         "decline": "Decline",
         "cancel": "Cancel booking",
+        "return": "Mark as returned",
         "status": {
             "label": "Status",
             "pending": "Awaiting approval",
             "confirmed": "Confirmed",
             "declined": "Declined",
-            "cancelled": "Cancelled"
+            "cancelled": "Cancelled",
+            "returned": "Returned"
         }
     },
     "notifications": {
@@ -103,7 +108,9 @@
             "BOOKING_REQUEST": "New booking request",
             "BOOKING_CONFIRMED": "Booking confirmed",
             "BOOKING_DECLINED": "Booking declined",
-            "BOOKING_CANCELLED": "Booking cancelled"
+            "BOOKING_CANCELLED": "Booking cancelled",
+            "BOOKING_RETURNED": "Item returned",
+            "ITEM_BOOKED": "Your item was booked"
         }
     }
 }

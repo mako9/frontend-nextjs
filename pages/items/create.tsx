@@ -52,7 +52,9 @@ export default function createItemPage({ myCommunities }) {
     const [postalCode, setPostalCode] = useState(null)
     const [city, setCity] = useState(null)
     const [isActive, setIsActive] = useState(true)
-    const [requiresApproval, setRequiresApproval] = useState(false)
+    // decided 2026-11-23: lending here is a favour the owner agrees to, so approval is on unless they
+    // switch it off. The backend default matches (ItemModel / ItemRequestDto, changelog-3.1.sql).
+    const [requiresApproval, setRequiresApproval] = useState(true)
     const [categories, setCategories] = useState<DropdownOption[]>([])
     const [community, setCommunity] = useState<DropdownOption | null>(
         myCommunities.content.length > 0
@@ -97,7 +99,7 @@ export default function createItemPage({ myCommunities }) {
                 city,
                 uuid: null,
                 name: name,
-                active: isActive,
+                isActive: isActive,
                 requiresApproval,
                 categories: categories.map((category) => category.id),
                 communityUuid: community?.id ?? null,
@@ -166,8 +168,11 @@ export default function createItemPage({ myCommunities }) {
             </div>
             <br />
             <div className="horizontal_container">
-                <text className={keyStyles.key}>{t('item.isActive')}</text>
+                <label className={keyStyles.key} htmlFor="item-is-active">
+                    {t('item.isActive')}
+                </label>
                 <input
+                    id="item-is-active"
                     className={inputStyles.input_right}
                     type="checkbox"
                     onChange={(e) => setIsActive(!isActive)}
@@ -176,8 +181,11 @@ export default function createItemPage({ myCommunities }) {
             </div>
             <br />
             <div className="horizontal_container">
-                <text className={keyStyles.key}>{t('item.requiresApproval')}</text>
+                <label className={keyStyles.key} htmlFor="item-requires-approval">
+                    {t('item.requiresApproval')}
+                </label>
                 <input
+                    id="item-requires-approval"
                     className={inputStyles.input_right}
                     type="checkbox"
                     onChange={() => setRequiresApproval(!requiresApproval)}

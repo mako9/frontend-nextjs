@@ -1,4 +1,5 @@
 import { request, clientSideRequest, HttpMethod, MimeType } from './request'
+import { session } from '../../test/utils/session'
 
 jest.mock('./logger', () => ({
     debug: jest.fn(),
@@ -7,7 +8,7 @@ jest.mock('./logger', () => ({
     error: jest.fn(),
 }))
 
-const mockSession = { accessToken: 'test-token' }
+const mockSession = session()
 
 function mockFetchOk(data: any) {
     ;(global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -62,7 +63,8 @@ describe('request', () => {
     })
 
     test('returns 401 and skips fetch when accessToken is missing', async () => {
-        const result = await request('http://api/test', { accessToken: null })
+        // the missing-token case, which is what the 401-without-fetch rule is about
+        const result = await request('http://api/test', session({ accessToken: null as unknown as string }))
 
         expect(global.fetch).not.toHaveBeenCalled()
         expect(result.data).toBeNull()
@@ -99,11 +101,11 @@ describe('request', () => {
 
     test('clears session accessToken on 401 response', async () => {
         mockFetchError(401, 'Unauthorized')
-        const session = { accessToken: 'test-token' }
+        const target = session()
 
-        await request('http://api/test', session)
+        await request('http://api/test', target)
 
-        expect(session.accessToken).toBe('')
+        expect(target.accessToken).toBe('')
     })
 })
 

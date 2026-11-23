@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap');
+
 html,
 body {
     padding: 0;
@@ -63,7 +65,6 @@ p {
     text-overflow: ellipsis;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap');
 * {
     margin: 0;
     padding: 0;
