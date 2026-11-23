@@ -5,7 +5,7 @@ import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslation
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ItemBooking } from '../../app/models/booking'
-import { getBooking, approveBooking, declineBooking, cancelBooking } from '../../app/lib/bookings'
+import { getBooking, approveBooking, declineBooking, cancelBooking, returnBooking } from '../../app/lib/bookings'
 import Button from '../../app/components/button'
 import styles from '../../app/styles/utils.module.css'
 
@@ -16,7 +16,9 @@ export default function BookingDetailPage({ booking }: { booking: ItemBooking | 
 
     if (!booking) return <p>{t('bookings.notFound')}</p>
 
-    const isOwner = false // We don't have item owner info here; keep simple for now
+    // the server tells us which side of the booking the caller is on; without this the owner's
+    // approve/decline controls were dead code
+    const isOwner = booking.isItemOwner
     const canCancel = (booking.status === 'PENDING' || booking.status === 'CONFIRMED') && new Date(booking.startAt) > new Date()
 
     return (
@@ -38,6 +40,12 @@ export default function BookingDetailPage({ booking }: { booking: ItemBooking | 
                         router.push('/bookings')
                     }} isDisabled={false} type="button" />
                 </>
+            )}
+            {booking.status === 'CONFIRMED' && (
+                <Button title={t('booking.return')} onClick={async () => {
+                    await returnBooking(booking.uuid, session)
+                    router.push('/bookings')
+                }} isDisabled={false} type="button" />
             )}
             {canCancel && (
                 <Button title={t('booking.cancel')} onClick={async () => {
