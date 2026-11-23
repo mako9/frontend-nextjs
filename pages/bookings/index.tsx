@@ -4,8 +4,10 @@ import { useTranslation } from 'next-i18next/pages'
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import Head from 'next/head'
 import Link from 'next/link'
-import { getMyBookings } from '../../app/lib/bookings'
+import { useState } from 'react'
+import { getMyBookings, getReceivedBookings } from '../../app/lib/bookings'
 import { ItemBooking, BookingStatus } from '../../app/models/booking'
+import ToggleButton from '../../app/components/toggleButton'
 import styles from '../../app/styles/utils.module.css'
 
 function statusColor(status: BookingStatus): string {
@@ -14,29 +16,57 @@ function statusColor(status: BookingStatus): string {
         case 'CONFIRMED': return 'green'
         case 'DECLINED': return 'red'
         case 'CANCELLED': return 'gray'
+        case 'RETURNED': return 'blue'
+        default: {
+            // a new status on the backend has to be a compile error here, not an invisible colour
+            const unhandled: never = status
+            return unhandled
+        }
     }
 }
 
-export default function BookingsPage({ myBookings }: { myBookings: ItemBooking[] }) {
+function BookingList({ bookings }: { bookings: ItemBooking[] }) {
     const { t } = useTranslation('common')
+    if (bookings.length === 0) return <p>{t('bookings.noBookings')}</p>
+    return (
+        <ul>
+            {bookings.map(b => (
+                <li key={b.uuid} style={{ marginBottom: '12px' }}>
+                    <Link href={`/bookings/${b.uuid}`}>
+                        <span style={{ color: statusColor(b.status), fontWeight: 'bold', marginRight: '8px' }}>
+                            [{t(`booking.status.${b.status.toLowerCase()}`)}]
+                        </span>
+                        {new Date(b.startAt).toLocaleDateString()} – {new Date(b.endAt).toLocaleDateString()}
+                    </Link>
+                </li>
+            ))}
+        </ul>
+    )
+}
+
+export default function BookingsPage({
+    myBookings,
+    receivedBookings = [],
+}: {
+    myBookings: ItemBooking[]
+    receivedBookings?: ItemBooking[]
+}) {
+    const { t } = useTranslation('common')
+    const [selectedIndex, setSelectedIndex] = useState(0)
     return (
         <>
             <Head><title>{t('bookings.title')}</title></Head>
             <h1 className={styles.headingXl}>{t('bookings.title')}</h1>
-            {myBookings.length === 0 ? <p>{t('bookings.noBookings')}</p> : (
-                <ul>
-                    {myBookings.map(b => (
-                        <li key={b.uuid} style={{ marginBottom: '12px' }}>
-                            <Link href={`/bookings/${b.uuid}`}>
-                                <span style={{ color: statusColor(b.status), fontWeight: 'bold', marginRight: '8px' }}>
-                                    [{t(`booking.status.${b.status.toLowerCase()}`)}]
-                                </span>
-                                {new Date(b.startAt).toLocaleDateString()} – {new Date(b.endAt).toLocaleDateString()}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <ToggleButton
+                titleOne={t('bookings.myRequests')}
+                titleTwo={t('bookings.received')}
+                selectedIndex={selectedIndex}
+                setSelectedIndex={setSelectedIndex}
+            />
+            <br />
+            {selectedIndex === 0
+                ? <BookingList bookings={myBookings} />
+                : <BookingList bookings={receivedBookings} />}
         </>
     )
 }
@@ -44,11 +74,16 @@ export default function BookingsPage({ myBookings }: { myBookings: ItemBooking[]
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context)
     if (!session) return { redirect: { destination: '/login', permanent: false } }
-    const page = await getMyBookings(session)
+    // the two lists are the same shape and neither is useful without the other, so one round trip
+    const [mine, received] = await Promise.all([
+        getMyBookings(session),
+        getReceivedBookings(session),
+    ])
     return {
         props: {
             ...(await serverSideTranslations(context.locale || 'en', ['common'])),
-            myBookings: page?.content ?? [],
+            myBookings: mine?.content ?? [],
+            receivedBookings: received?.content ?? [],
         }
     }
 }
