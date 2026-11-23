@@ -11,7 +11,8 @@ jest.mock('../datePicker', () => ({
     __esModule: true,
     default: ({ selectedDate, excludeDateIntervals }: any) => (
         <div data-testid="date-picker">
-            {selectedDate.toISOString()}|{(excludeDateIntervals ?? []).length}
+            {JSON.stringify(excludeDateIntervals ?? [])}|
+            {(excludeDateIntervals ?? []).length}
         </div>
     ),
 }))
@@ -94,6 +95,24 @@ describe('foreignItem', () => {
             const pickers = screen.getAllByTestId('date-picker')
             expect(pickers).toHaveLength(2)
             pickers.forEach((picker) => expect(picker.textContent).toMatch(/\|2$/))
+        })
+
+        // the picker's day cells all sit at midnight, so an interval that starts at nine in the morning
+        // would leave the day it starts on selectable - which is not "taken" to the person looking at a
+        // calendar. The server keeps applying the real overlap rule; the calendar speaks in whole days.
+        test('blocks the whole of every booked day, not just the part after the handover time', () => {
+            render(<WrapperBooked />)
+            const [picker] = screen.getAllByTestId('date-picker')
+            const intervals = JSON.parse(picker.textContent.split('|')[0])
+            expect(intervals).toHaveLength(2)
+            for (const interval of intervals) {
+                const start = new Date(interval.start)
+                const end = new Date(interval.end)
+                expect([start.getHours(), start.getMinutes(), start.getSeconds(), start.getMilliseconds()]).toEqual([0, 0, 0, 0])
+                expect([end.getHours(), end.getMinutes()]).toEqual([23, 59])
+                expect(start.getTime()).toBeLessThan(new Date(bookedDates[intervals.indexOf(interval)].startAt).getTime())
+                expect(end.getTime()).toBeGreaterThan(new Date(bookedDates[intervals.indexOf(interval)].endAt).getTime())
+            }
         })
 
         test('says that some dates are taken, when some are', () => {

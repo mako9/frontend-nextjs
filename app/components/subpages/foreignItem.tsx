@@ -23,10 +23,17 @@ export default function foreignCommunity(
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [booked, setBooked] = useState(false)
-    const excludeDateIntervals = bookedDates.map((range) => ({
-        start: new Date(range.startAt),
-        end: new Date(range.endAt),
-    }))
+    // The picker paints every day cell at midnight, so a raw booking interval would exclude the days its
+    // midnight falls inside and skip the day it merely starts on: 09:00 -> 17:00 two days later would
+    // block one day out of three. A neighbour reads a calendar in whole days, so the day of handover
+    // counts as taken. This is presentation only - the server refuses overlaps by exact timestamp.
+    const excludeDateIntervals = bookedDates.map((range) => {
+        const start = new Date(range.startAt)
+        start.setHours(0, 0, 0, 0)
+        const end = new Date(range.endAt)
+        end.setHours(23, 59, 59, 999)
+        return { start, end }
+    })
     const categories = itemData.categories
         .map((category) => itemCategories(t).find((e) => e.id === category))
         .filter((c): c is { id: string; label: string } => c !== undefined)
