@@ -11,6 +11,7 @@
     "preinstall": "npx only-allow pnpm",
     "dev": "next dev",
     "build": "next build",
+    "typecheck": "tsc --noEmit",
     "start": "next start",
     "test": "jest --watch",
     "test-ci": "jest --ci"

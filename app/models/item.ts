@@ -9,12 +9,18 @@ export type Item = {
     communityUuid: string
     userUuid: string
     active: boolean
-    availability: string
-    availableUntil: string
+    availability: Array<ItemTimeInterval>
+    availableUntil: string | null
     description: string
     communityName: string
-    firstImageUuid: string
+    firstImageUuid: string | null
     requiresApproval?: boolean
+}
+
+/** What the backend calls ItemTimeIntervalDto: a window in which the item can be lent out. */
+export type ItemTimeInterval = {
+    startAt: string
+    endAt: string
 }
 
 export type ItemImage = {

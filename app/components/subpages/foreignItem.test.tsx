@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import foreignItem from './foreignItem'
+import { session } from '../../../test/utils/session'
 
 jest.mock('../../lib/items', () => ({
     getItemImage: jest.fn().mockResolvedValue(new Blob(['img'])),
@@ -24,7 +25,7 @@ const bookedDates = [
 ]
 // not a full Session, and the lib functions only pass it through; the cast is what the
 // type checker needs (Phase 1 reduces the remaining fixtures the same way)
-const mockSession = { accessToken: 'token' } as any
+const mockSession = session()
 const mockItemData: any = {
     uuid: 'item-1',
     name: 'Lawn Mower',

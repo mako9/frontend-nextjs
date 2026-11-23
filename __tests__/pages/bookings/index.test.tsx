@@ -40,7 +40,10 @@ describe('Bookings index page — getServerSideProps', () => {
         const result = await getServerSideProps(context as any)
         expect('props' in result).toBe(true)
         if ('props' in result) {
-            expect(result.props.myBookings).toEqual([mockBooking])
+            // Next's GetServerSidePropsResult allows props to be a promise, so the props object
+            // itself has to be awaited before a field can be read off it
+            const props = await result.props
+            expect(props.myBookings).toEqual([mockBooking])
         }
     })
 

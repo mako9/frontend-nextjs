@@ -3,7 +3,9 @@ import logger from './logger'
 
 export async function request<Type>(
     url: string,
-    session: Session,
+    // the body null-checks this and the 401-on-missing-token rule is specified for it, so the signature has
+    // to admit what the code already accepts
+    session: Session | null,
     method: HttpMethod = HttpMethod.Get,
     data: any = null,
     contentType: MimeType = MimeType.json,
