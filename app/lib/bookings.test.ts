@@ -5,6 +5,9 @@ import {
     approveBooking,
     declineBooking,
     cancelBooking,
+    getReceivedBookings,
+    returnBooking,
+    getBookingDates,
 } from './bookings'
 
 jest.mock('../utils/logger', () => ({
@@ -157,5 +160,57 @@ describe('cancelBooking', () => {
     test('does not throw on error response', async () => {
         mockFetchError()
         await expect(cancelBooking('b-1', mockSession)).resolves.toBeUndefined()
+    })
+})
+
+describe('getReceivedBookings', () => {
+    test('calls GET /user/item/booking/received and returns page data', async () => {
+        mockFetchOk(mockPage)
+        const result = await getReceivedBookings(mockSession)
+        expect(fetch).toHaveBeenCalledWith(
+            expect.stringContaining('/user/item/booking/received'),
+            expect.any(Object)
+        )
+        expect(result).toEqual(mockPage)
+    })
+
+    test('returns null on error response', async () => {
+        mockFetchError()
+        const result = await getReceivedBookings(mockSession)
+        expect(result).toBeNull()
+    })
+})
+
+describe('returnBooking', () => {
+    test('calls PATCH /user/item/booking/:uuid/return', async () => {
+        mockFetchOk(null)
+        await returnBooking('b-1', mockSession)
+        expect(fetch).toHaveBeenCalledWith(
+            expect.stringContaining('/user/item/booking/b-1/return'),
+            expect.objectContaining({ method: 'PATCH' })
+        )
+    })
+
+    test('does not throw on error response', async () => {
+        mockFetchError()
+        await expect(returnBooking('b-1', mockSession)).resolves.toBeUndefined()
+    })
+})
+
+describe('getBookingDates', () => {
+    test('calls GET /user/item/:itemUuid/booking/dates and returns the ranges', async () => {
+        mockFetchOk([{ startAt: '2026-08-01T10:00:00Z', endAt: '2026-08-07T10:00:00Z' }])
+        const result = await getBookingDates('i-1', mockSession)
+        expect(fetch).toHaveBeenCalledWith(
+            expect.stringContaining('/user/item/i-1/booking/dates'),
+            expect.any(Object)
+        )
+        expect(result).toEqual([{ startAt: '2026-08-01T10:00:00Z', endAt: '2026-08-07T10:00:00Z' }])
+    })
+
+    // the caller renders a date picker either way: an empty list is a usable answer, a null is a crash
+    test('returns an empty list, not null, when the request fails', async () => {
+        mockFetchError()
+        await expect(getBookingDates('i-1', mockSession)).resolves.toEqual([])
     })
 })
