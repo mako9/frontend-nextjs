@@ -24,8 +24,15 @@ export type Item = {
  * `{"startDayOfWeek": 1, "endDayOfWeek": 3, "startTimeAt": "09:00Z", "endTimeAt": "17:00Z"}`.
  * Days are `java.time.DayOfWeek`, so 1 = Monday … 7 = Sunday; the times are `OffsetTime` text.
  * The keys have to match exactly: `ownedItem.tsx` posts `itemData.availability` straight back on update, and
- * the artifact answers an interval with unrecognised keys with HTTP 400 (measured) rather than ignoring it.
- * No UI reads these fields yet - the availability editor is Phase 2c's - but nothing may invent a second shape
+ * the four names are the whole contract.
+ * **Corrected 2026-11-24, measured on the artifact:** this comment claimed an interval carrying unrecognised
+ * keys is answered with HTTP 400. It is not - unknown properties are ignored, a fifth key is accepted and comes
+ * back dropped. Two consequences worth knowing before extending this type: a fifth field added server-side
+ * round-trips through the web (the value here is whatever `JSON.parse` produced, keys and all) but is dropped by
+ * the Flutter model, which rebuilds the map from the four fields - so it survives a web save and dies on a
+ * mobile save; and the server normalises `OffsetTime` to UTC (`08:30+01:00` is answered as `08:30Z`), so a
+ * `string` here is only as meaningful as the writer's discipline.
+ * No UI reads these fields yet - the availability editor is plan 2d's - but nothing may invent a second shape
  * for it either.
  */
 export type ItemTimeInterval = {
